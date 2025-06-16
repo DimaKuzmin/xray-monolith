@@ -34,7 +34,7 @@
 #include "HUDManager.h"
 #include "WeaponMagazinedWGrenade.h"
 #include "../xrEngine/GameMtlLib.h"
-#include "../Layers/xrRender/xrRender_console.h"
+ 
 #include "pch_script.h"
 #include "script_game_object.h"
 
@@ -509,6 +509,8 @@ inline float smoothstep(float x)
 {
 	return x * x * (3 - 2 * x);
 }
+
+extern float hud_fov_aim_factor;
 
 float CWeapon::GetTargetHudFov()
 {
@@ -1181,6 +1183,8 @@ void CWeapon::OnEvent(NET_Packet& P, u16 type)
 		break;
 	}
 };
+ 
+extern float sil_glow_cool_temp_rate;			// Temperature removed after 1 second
 
 void CWeapon::shedule_Update(u32 dT)
 {

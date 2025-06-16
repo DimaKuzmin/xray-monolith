@@ -701,15 +701,18 @@ void CMainMenu::OnDownloadPatchProgress(u64 bytesReceived, u64 totalSize)
 	m_sPDProgress.Progress = (float(bytesReceived) / float(totalSize)) * 100.0f;
 };
 
+/*
 extern ENGINE_API string512 g_sLaunchOnExit_app;
 extern ENGINE_API string512 g_sLaunchOnExit_params;
 extern ENGINE_API string_path g_sLaunchWorkingFolder;
-
+*/
 void CMainMenu::OnRunDownloadedPatch(CUIWindow*, void*)
 {
+	/*
 	xr_strcpy(g_sLaunchOnExit_app, *m_sPatchFileName);
 	xr_strcpy(g_sLaunchOnExit_params, "");
 	xr_strcpy(g_sLaunchWorkingFolder, "");
+	*/
 	Console->Execute("quit");
 }
 

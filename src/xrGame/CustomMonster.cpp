@@ -597,6 +597,7 @@ void CCustomMonster::eye_pp_s0()
 	// Eye matrix
 	IKinematics* V = smart_cast<IKinematics*>(Visual());
 	V->CalculateBones();
+
 	Fmatrix& mEye = V->LL_GetTransform(u16(eye_bone));
 	Fmatrix X;
 	X.mul_43(XFORM(), mEye);
@@ -678,18 +679,18 @@ void CCustomMonster::eye_pp_s2()
 
 void CCustomMonster::Exec_Visibility()
 {
-	//if (0==Sector())				return;
-	if (!g_Alive()) return;
+ 	if (!g_Alive()) return;
 
+	OPTICK_EVENT("ai_stalker::exec_visability")
 	Device.Statistic->AI_Vis.Begin();
 	switch (eye_pp_stage % 2)
 	{
-	case 0:
-		eye_pp_s0();
-		eye_pp_s1();
-		break;
-	case 1: eye_pp_s2();
-		break;
+		case 0:
+			eye_pp_s0();
+			eye_pp_s1();
+			break;
+		case 1: eye_pp_s2();
+			break;
 	}
 	++eye_pp_stage;
 	Device.Statistic->AI_Vis.End();

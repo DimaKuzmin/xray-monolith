@@ -986,91 +986,77 @@ void CAI_Stalker::destroy_anim_mov_ctrl()
 void CAI_Stalker::UpdateCL()
 {
 	START_PROFILE("stalker")
-		START_PROFILE("stalker/client_update")
-			VERIFY2(PPhysicsShell()||getEnabled(), *cName());
+	START_PROFILE("stalker/client_update")
+	VERIFY2(PPhysicsShell()||getEnabled(), *cName());
 
-			if (g_Alive())
-			{
-				if (g_mt_config.test(mtObjectHandler) && CObjectHandler::planner().initialized())
-				{
-					fastdelegate::FastDelegate0<> f = fastdelegate::FastDelegate0<>(
-						this, &CAI_Stalker::update_object_handler);
-#ifdef DEBUG
-			xr_vector<fastdelegate::FastDelegate0<> >::const_iterator	I;
-			I	= std::find(Device.seqParallel.begin(),Device.seqParallel.end(),f);
-			VERIFY							(I == Device.seqParallel.end());
-#endif
-					Device.seqParallel.push_back(
-						fastdelegate::FastDelegate0<>(this, &CAI_Stalker::update_object_handler));
-				}
-				else
-				{
-					START_PROFILE("stalker/client_update/object_handler")
-						update_object_handler();
-					STOP_PROFILE
-				}
-
-				if (
-					(movement().speed(character_physics_support()->movement()) > EPS_L)
-					&&
-					(eMovementTypeStand != movement().movement_type())
-					&&
-					(eMentalStateDanger == movement().mental_state())
-				)
-				{
-					if (
-						(eBodyStateStand == movement().body_state())
-						&&
-						(eMovementTypeRun == movement().movement_type())
-					)
-					{
-						sound().play(eStalkerSoundRunningInDanger);
-					}
-					else
-					{
-						//				sound().play	(eStalkerSoundWalkingInDanger);
-					}
-				}
-			}
-
-			START_PROFILE("stalker/client_update/inherited")
-				inherited::UpdateCL();
+	if (g_Alive())
+	{
+		if (g_mt_config.test(mtObjectHandler) && CObjectHandler::planner().initialized())
+		{
+			fastdelegate::FastDelegate0<> f = fastdelegate::FastDelegate0<>(
+				this, &CAI_Stalker::update_object_handler);
+			Device.seqParallel.push_back( fastdelegate::FastDelegate0<>(this, &CAI_Stalker::update_object_handler) );
+		}
+		else
+		{
+			START_PROFILE("stalker/client_update/object_handler")
+			update_object_handler();
 			STOP_PROFILE
+		}
 
-			START_PROFILE("stalker/client_update/physics")
-				m_pPhysics_support->in_UpdateCL();
-			STOP_PROFILE
-
-			if (g_Alive())
+		if ( (movement().speed(character_physics_support()->movement()) > EPS_L) &&
+			(eMovementTypeStand != movement().movement_type())
+			&&
+			(eMentalStateDanger == movement().mental_state())
+		)
+		{
+			if ( ( eBodyStateStand == movement().body_state() ) && ( eMovementTypeRun == movement().movement_type() ) )
 			{
-				START_PROFILE("stalker/client_update/sight_manager")
-					VERIFY(!m_pPhysicsShell);
-					try
-					{
-						sight().update();
-					}
-					catch (...)
-					{
-						sight().setup(CSightAction(SightManager::eSightTypeCurrentDirection));
-						sight().update();
-					}
-
-					Exec_Look(client_update_fdelta());
-				STOP_PROFILE
-
-				START_PROFILE("stalker/client_update/step_manager")
-					CStepManager::update(false);
-				STOP_PROFILE
-
-				START_PROFILE("stalker/client_update/weapon_shot_effector")
-					if (weapon_shot_effector().IsActive())
-						weapon_shot_effector().Update();
-				STOP_PROFILE
+				sound().play(eStalkerSoundRunningInDanger);
 			}
-#ifdef DEBUG
-	debug_text	();
-#endif
+			else
+			{
+				//				sound().play	(eStalkerSoundWalkingInDanger);
+			}
+		}
+	}
+
+	START_PROFILE("stalker/client_update/inherited")
+	inherited::UpdateCL();
+	STOP_PROFILE
+
+	START_PROFILE("stalker/client_update/physics")
+	m_pPhysics_support->in_UpdateCL();
+	STOP_PROFILE
+
+	if (g_Alive())
+	{
+		START_PROFILE("stalker/client_update/sight_manager")
+		VERIFY(!m_pPhysicsShell);
+		try
+		{
+			sight().update();
+		}
+		catch (...)
+		{
+			sight().setup(CSightAction(SightManager::eSightTypeCurrentDirection));
+			sight().update();
+		}
+
+		Exec_Look(client_update_fdelta());
 		STOP_PROFILE
+
+		START_PROFILE("stalker/client_update/step_manager")
+			CStepManager::update(false);
+		STOP_PROFILE
+
+		START_PROFILE("stalker/client_update/weapon_shot_effector")
+			if (weapon_shot_effector().IsActive())
+				weapon_shot_effector().Update();
+		STOP_PROFILE
+	}
+
+	STOP_PROFILE
 	STOP_PROFILE
 }
 
@@ -1131,17 +1117,17 @@ void CAI_Stalker::shedule_Update(u32 DT)
 				else
 				{
 					START_PROFILE("stalker/schedule_update/vision")
-						Exec_Visibility();
+					Exec_Visibility();
 					STOP_PROFILE
 				}
 
 				START_PROFILE("stalker/schedule_update/memory")
 					START_PROFILE("stalker/schedule_update/memory/process")
-						process_enemies();
+					process_enemies();
 					STOP_PROFILE
 
 					START_PROFILE("stalker/schedule_update/memory/update")
-						memory().update(dt);
+					memory().update(dt);
 					STOP_PROFILE
 
 				STOP_PROFILE

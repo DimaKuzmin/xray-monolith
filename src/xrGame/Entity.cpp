@@ -17,7 +17,6 @@
 #include "ai_space.h"
 #include "alife_simulator.h"
 #include "alife_time_manager.h"
-#include "../Layers/xrRender/xrRender_console.h"
 #include "InventoryOwner.h"
 #include "Inventory.h"
 #include "Weapon.h"
@@ -411,6 +410,9 @@ static u32 clampU(u32 x, u32 a, u32 b)
 {
 	return x < a ? a : (x > b ? b : x);
 }
+
+extern int heat_vision_cooldown;
+extern float heat_vision_cooldown_time;
 
 float CEntity::GetHotness() {
 	if (heat_vision_cooldown && (AlreadyDie() || !g_Alive())) 

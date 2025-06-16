@@ -15,8 +15,7 @@
 
 #include "game_cl_mp.h"
 #include "reward_event_generator.h"
-#include "../Layers/xrRender/xrRender_console.h"
-
+ 
 #define FLAME_TIME 0.05f
 
 
@@ -163,6 +162,13 @@ void CWeapon::FireEnd()
 	CShootingObject::FireEnd();
 	StopShotEffector();
 }
+
+
+//--DSR-- SilencerOverheat_start
+extern float sil_glow_max_temp;					// Max possible weapon temperature
+extern float sil_glow_shot_temp;				// Temperature added on 1 successful shot
+  
+//--DSR-- SilencerOverheat_end
 
 //--DSR-- SilencerOverheat_start
 void CWeapon::FireBullet(const Fvector& pos,

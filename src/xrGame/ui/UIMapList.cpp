@@ -70,6 +70,7 @@ CUIMapList::~CUIMapList()
 
 void CUIMapList::StartDedicatedServer()
 {
+	/*	
 	string_path ModuleFileName;
 	GetModuleFileName(NULL, ModuleFileName, sizeof(ModuleFileName));
 
@@ -88,6 +89,7 @@ void CUIMapList::StartDedicatedServer()
 	Msg("Working folder is:%s", g_sLaunchWorkingFolder);
 	Msg("%s %s", g_sLaunchOnExit_app, g_sLaunchOnExit_params);
 	Console->Execute("quit");
+	*/
 }
 
 
