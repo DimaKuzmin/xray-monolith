@@ -36,11 +36,12 @@ void CStats::FrameStart()
 	RenderDUMP.FrameEnd();
 	RenderDUMP_Second.FrameEnd();
 
-	RenderDUMP_Wait.FrameEnd();
-	RenderDUMP_Lights.FrameEnd();
- 	RenderDUMP_DT_VIS.FrameEnd();
+	RenderGPU.FrameEnd();
+  	RenderDUMP_DT_VIS.FrameEnd();
 	RenderDUMP_DT_Render.FrameEnd();
 	RenderDUMP_DT_Cache.FrameEnd();
+	RenderSSS.FrameEnd();
+	RenderEmissive.FrameEnd();
  
 	Sound.FrameEnd();
 	Input.FrameEnd();
@@ -66,11 +67,14 @@ void CStats::FrameStart()
 	g_SpatialSpacePhysic->stat_remove.FrameEnd();
 
 	RenderTOTAL_Real.FrameEnd();
-	RenderMain.FrameEnd();
-	RenderMain_Calcualte.FrameEnd();
 
-	RenderMainVIS_Static.FrameEnd();
+
+	RenderMain.FrameEnd();
+ 	RenderMainVIS_HUD.FrameEnd();
+ 	RenderMainVIS_Static.FrameEnd();
 	RenderMainVIS_Dynamic.FrameEnd();
+	RenderMainPPUI.FrameEnd();
+	
 	RenderSun.FrameEnd();
 	RenderLights.FrameEnd();
  	Render_postprocess.FrameEnd();
@@ -136,11 +140,11 @@ void CStats::FrameEnd()
 	RenderDUMP.FrameStart();
 	RenderDUMP_Second.FrameStart();
  
-	RenderDUMP_Wait.FrameStart();
-	RenderDUMP_Lights.FrameStart();
- 	RenderDUMP_DT_VIS.FrameStart();
+	RenderGPU.FrameStart();
+  	RenderDUMP_DT_VIS.FrameStart();
 	RenderDUMP_DT_Render.FrameStart();
 	RenderDUMP_DT_Cache.FrameStart();
+	RenderSSS.FrameStart();
   
 	Sound.FrameStart();
 	Input.FrameStart();
@@ -166,11 +170,14 @@ void CStats::FrameEnd()
 	g_SpatialSpacePhysic->stat_remove.FrameStart();
 
 	RenderTOTAL_Real.FrameStart();
+	
 	RenderMain.FrameStart();
-	RenderMain_Calcualte.FrameStart();
-
-	RenderMainVIS_Static.FrameStart();
+	RenderMainVIS_HUD.FrameStart();
+ 	RenderMainVIS_Static.FrameStart();
 	RenderMainVIS_Dynamic.FrameStart();
+	RenderMainPPUI.FrameStart();
+	RenderEmissive.FrameStart();
+
 
 	RenderSun.FrameStart();
 	RenderLights.FrameStart();

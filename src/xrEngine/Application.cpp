@@ -456,7 +456,6 @@ void CApplication::load_draw_internal()
 // Initialize Engine 
 // Initialize
 
-void InitEngine();
 void InitSettings();
 void InitConsole();
 void InitInput();
@@ -557,8 +556,7 @@ void EngineStart1(LPCSTR lpCmdLine)
 	g_bIntroFinished = TRUE;
 
 	LPCSTR fsgame_ltx_name = "-fsltx ";
-
-	string_path fsgame = "";
+ 	string_path fsgame = "";
 	if (strstr(lpCmdLine, fsgame_ltx_name))
 	{
 		int sz = xr_strlen(fsgame_ltx_name);
@@ -578,34 +576,36 @@ void EngineStart1(LPCSTR lpCmdLine)
 		xr_strcpy(Core.CompName, sizeof(Core.CompName), "Computer");
 	}
 
+ 	// Initialize Engine 
+	Engine.Initialize();
+	while (!g_bIntroFinished)
+		Sleep(100);
+	Device.Initialize();
+
+	InitInput();
+	InitConsole();
+
+	Engine.External.CreateRendererList();
+
+	extern bool ignore_verify;
+	ignore_verify = !strstr(Core.Params, "-dbgdev");
+	Msg("command line %s", Core.Params);
+
+	if (strstr(Core.Params, "-r2a"))
+		Console->Execute("renderer renderer_r2a");
+	else if (strstr(Core.Params, "-r2"))
+		Console->Execute("renderer renderer_r2");
+	else
 	{
-		InitEngine();
-		InitInput();
-		InitConsole();
-
-		Engine.External.CreateRendererList();
-
-		extern bool ignore_verify;
-		ignore_verify = !strstr(Core.Params, "-dbgdev");
-		Msg("command line %s", Core.Params);
-
-		if (strstr(Core.Params, "-r2a"))
-			Console->Execute("renderer renderer_r2a");
-		else if (strstr(Core.Params, "-r2"))
-			Console->Execute("renderer renderer_r2");
-		else
-		{
-			CCC_LoadCFG_custom* pTmp = xr_new<CCC_LoadCFG_custom>("renderer ");
-			pTmp->Execute(Console->ConfigFile);
-			xr_delete(pTmp);
-		}
-
-		//. InitInput ( );
-		Engine.External.Initialize();
-		Console->Execute("stat_memory");
-
-		Startup();
-		Core._destroy();
+		CCC_LoadCFG_custom* pTmp = xr_new<CCC_LoadCFG_custom>("renderer ");
+		pTmp->Execute(Console->ConfigFile);
+		xr_delete(pTmp);
 	}
+
+ 	Engine.External.Initialize();
+	Console->Execute("stat_memory");
+
+	Startup();
+	Core._destroy();
 }
  

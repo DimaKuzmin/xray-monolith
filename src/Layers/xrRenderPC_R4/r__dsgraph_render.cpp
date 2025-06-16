@@ -863,6 +863,8 @@ void R_dsgraph_structure::r_dsgraph_render_subspace(IRender_Sector* _sector, Fma
 void R_dsgraph_structure::r_dsgraph_render_subspace(IRender_Sector* _sector, CFrustum* _frustum, Fmatrix& mCombined,
                                                     Fvector& _cop, BOOL _dynamic, BOOL _precise_portals)
 {
+	Device.Statistic->RenderSubspace.Begin();
+
 	VERIFY(_sector);
 	RImplementation.marker ++; // !!! critical here
 
@@ -940,6 +942,8 @@ void R_dsgraph_structure::r_dsgraph_render_subspace(IRender_Sector* _sector, CFr
 	// Restore
 	ViewBase = ViewSave;
 	View = 0;
+
+	Device.Statistic->RenderSubspace.End();
 }
 
 #include "fhierrarhyvisual.h"

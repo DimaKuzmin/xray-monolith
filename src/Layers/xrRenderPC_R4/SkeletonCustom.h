@@ -83,18 +83,6 @@ public:
 
 DEFINE_VECTOR(intrusive_ptr<CSkeletonWallmark>, SkeletonWMVec, SkeletonWMVecIt);
 
-// sanity check
-#ifdef DEBUG
-	struct dbg_marker{
-		BOOL*			lock;
-		dbg_marker		(BOOL* b)	{lock=b; VERIFY(*lock==FALSE); *lock=TRUE;}
-		~dbg_marker		()			{*lock=FALSE;}
-	};
-#	define _DBG_SINGLE_USE_MARKER	dbg_marker	_dbg_marker(&dbg_single_use_marker)
-#else
-#	define _DBG_SINGLE_USE_MARKER
-#endif
-
 class CKinematics : public FHierrarhyVisual, public IKinematics
 {
 	typedef FHierrarhyVisual inherited;

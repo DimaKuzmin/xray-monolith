@@ -14,14 +14,6 @@
 # include "perlin.h"
 #endif
 
-#ifdef _EDITOR
-bool g_dedicated_server = false;
-#endif
-
-#ifdef INGAME_EDITOR
-# include "editor_environment_manager.hpp"
-#endif // INGAME_EDITOR
-
 extern Fvector4 ps_ssfx_grass_interactive;
 
 ENGINE_API IGame_Persistent* g_pGamePersistent = NULL;
@@ -46,16 +38,7 @@ IGame_Persistent::IGame_Persistent()
 	PerlinNoise1D->SetOctaves(2);
 	PerlinNoise1D->SetAmplitude(0.66666f);
 
-#ifndef INGAME_EDITOR
-#ifndef _EDITOR
 	pEnvironment = xr_new<CEnvironment>();
-#endif
-#else // #ifdef INGAME_EDITOR
-    if (RDEVICE.editor())
-        pEnvironment = xr_new<editor::environment::manager>();
-    else
-        pEnvironment = xr_new<CEnvironment>();
-#endif // #ifdef INGAME_EDITOR
 }
 
 IGame_Persistent::~IGame_Persistent()
@@ -66,9 +49,8 @@ IGame_Persistent::~IGame_Persistent()
 	RDEVICE.seqAppEnd.Remove(this);
 	RDEVICE.seqAppActivate.Remove(this);
 	RDEVICE.seqAppDeactivate.Remove(this);
-#ifndef _EDITOR
+
 	xr_delete(pEnvironment);
-#endif
 	xr_delete(m_pGShaderConstants); //--#SM+#--
 
 	VERIFY(m_textures_prefetch_config);
@@ -86,9 +68,7 @@ void IGame_Persistent::OnAppDeactivate()
 
 void IGame_Persistent::OnAppStart()
 {
-#ifndef _EDITOR
 	Environment().load();
-#endif
 
 	// Texture Prefetch Config
 	string_path file_name;
@@ -107,14 +87,10 @@ void IGame_Persistent::OnAppStart()
 
 void IGame_Persistent::OnAppEnd()
 {
-#ifndef _EDITOR
 	Environment().unload();
-#endif
 	OnGameEnd();
 
-#ifndef _EDITOR
 	DEL_INSTANCE(g_hud);
-#endif
 }
 
 

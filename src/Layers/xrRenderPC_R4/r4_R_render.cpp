@@ -5,6 +5,7 @@
 #include "../../xrEngine/xr_object.h"
 
 #include "QueryHelper.h"
+extern u32 g_r;
 
 IC bool pred_sp_sort(ISpatial* _1, ISpatial* _2)
 {
@@ -15,6 +16,7 @@ IC bool pred_sp_sort(ISpatial* _1, ISpatial* _2)
 
 void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 {
+	Device.Statistic->RenderMain.Begin();
 	marker ++;
 
 	// Calculate sector(s) and their objects
@@ -23,6 +25,10 @@ void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 		//!!!
 		//!!! BECAUSE OF PARALLEL HOM RENDERING TRY TO DELAY ACCESS TO HOM AS MUCH AS POSSIBLE
 		//!!!
+		
+		Device.Statistic->RenderMainVIS_Static.Begin();
+
+		if (true)
 		{
 			// Traverse object database
 			g_SpatialSpace->q_frustum
@@ -49,7 +55,8 @@ void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 				if (O)
 				{
 					CROS_impl* R = (CROS_impl*)O->ROS();
-					if (R) R->update(O);
+					if (R) 
+						R->update(O);
 				}
 
 				// update light-vis for selected entity
@@ -66,6 +73,7 @@ void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 			}
 		}
 
+		
 		// Traverse sector/portal structure
 		PortalTraverser.traverse
 		(
@@ -76,6 +84,8 @@ void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 			CPortalTraverser::VQ_HOM + CPortalTraverser::VQ_SSA + CPortalTraverser::VQ_FADE
 			//. disabled scissoring (HW.Caps.bScissor?CPortalTraverser::VQ_SCISSOR:0)	// generate scissoring info
 		);
+
+ 
 
 		// Determine visibility for static geometry hierrarhy
 		for (u32 s_it = 0; s_it < PortalTraverser.r_sectors.size(); s_it++)
@@ -89,6 +99,9 @@ void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 			}
 		}
 
+		Device.Statistic->RenderMainVIS_Static.End();
+
+		Device.Statistic->RenderMainVIS_Dynamic.Begin();
 		// Traverse frustums
 		for (u32 o_it = 0; o_it < lstRenderables.size(); o_it++)
 		{
@@ -143,6 +156,9 @@ void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 				break; // exit loop on frustums
 			}
 		}
+		Device.Statistic->RenderMainVIS_Dynamic.End();
+
+		Device.Statistic->RenderMainVIS_HUD.Begin();
 		if (g_pGameLevel && (phase == PHASE_NORMAL))
 		{
 			g_hud->Render_Last(); // HUD
@@ -151,6 +167,7 @@ void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 			if (g_hud->RenderCamAttachedUIQuery())
 				r_dsgraph_render_cam_ui();
 		}
+		Device.Statistic->RenderMainVIS_HUD.End();
 	}
 	else
 	{
@@ -164,6 +181,9 @@ void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 				r_dsgraph_render_cam_ui();
 		}
 	}
+
+
+	Device.Statistic->RenderMain.End();
 }
 
 void CRender::render_menu()
@@ -174,6 +194,7 @@ void CRender::render_menu()
 	RCache.set_Stencil(FALSE);
 	RCache.set_ColorWriteEnable();
 
+	Device.Statistic->RenderMainPPUI.Begin();
 	// Main Render
 	{
 		Target->u_setrt(Target->rt_Generic_0, 0, 0, HW.pBaseZB); // LDR RT
@@ -187,6 +208,7 @@ void CRender::render_menu()
 		HW.pContext->ClearRenderTargetView(Target->rt_Generic_1->pRT, ColorRGBA);
 		g_pGamePersistent->OnRenderPPUI_PP(); // PP-UI
 	}
+ 	Device.Statistic->RenderMainPPUI.End();
 
 	// Actual Display
 	Target->u_setrt(Device.dwWidth, Device.dwHeight, HW.pBaseRT,NULL,NULL, HW.pBaseZB);
@@ -216,7 +238,54 @@ void CRender::render_menu()
 	RCache.Render(D3DPT_TRIANGLELIST, Offset, 0, 4, 0, 2);
 }
 
-extern u32 g_r;
+void CRender::render_pre_lights()
+{
+	Target->phase_occq();
+	LP_normal.clear();
+	LP_pending.clear();
+	if (RImplementation.o.dx10_msaa)
+		RCache.set_ZB(RImplementation.Target->rt_MSAADepth->pZRT);
+
+ 	// perform tests
+	u32 count = 0;
+	light_Package& LP = Lights.package;
+
+	// stats
+	stats.l_shadowed = LP.v_shadowed.size();
+	stats.l_unshadowed = LP.v_point.size() + LP.v_spot.size();
+	stats.l_total = stats.l_shadowed + stats.l_unshadowed;
+
+	// perform tests
+	count = _max(count, LP.v_point.size());
+	count = _max(count, LP.v_spot.size());
+	count = _max(count, LP.v_shadowed.size());
+	for (u32 it = 0; it < count; it++)
+	{
+		if (it < LP.v_point.size())
+		{
+			light* L = LP.v_point[it];
+			L->vis_prepare();
+			if (L->vis.pending) LP_pending.v_point.push_back(L);
+			else LP_normal.v_point.push_back(L);
+		}
+		if (it < LP.v_spot.size())
+		{
+			light* L = LP.v_spot[it];
+			L->vis_prepare();
+			if (L->vis.pending) LP_pending.v_spot.push_back(L);
+			else LP_normal.v_spot.push_back(L);
+		}
+		if (it < LP.v_shadowed.size())
+		{
+			light* L = LP.v_shadowed[it];
+			L->vis_prepare();
+			if (L->vis.pending) LP_pending.v_shadowed.push_back(L);
+			else LP_normal.v_shadowed.push_back(L);
+		}
+	}
+ 	LP_normal.sort();
+	LP_pending.sort();
+}
 
 void CRender::Render()
 {
@@ -261,35 +330,6 @@ void CRender::Render()
 
 	//******* Z-prefill calc - DEFERRER RENDERER
 	Target->phase_scene_prepare();
-	
-	//*******
-	// Sync point
-	Device.Statistic->RenderDUMP_Wait.Begin();
-	if (ps_r2_qsync)
-	{
-		CTimer T;
-		T.Start();
-		
-		BOOL result = FALSE;
-		HRESULT hr = S_FALSE;
-		while ((hr = GetData(q_sync_point[q_sync_count], &result, sizeof(result))) == S_FALSE)
-		{
-			if (!SwitchToThread()) 
-				Sleep(ps_r2_wait_sleep);
-			
-			if (T.GetElapsed_ms() > 500)
-			{
-				result = FALSE;
-				break;
-			}
-		}
-	}
-
-	Device.Statistic->RenderDUMP_Wait.End();
-
-
-	q_sync_count = (q_sync_count + 1) % HW.Caps.iGPUNum;
-	CHK_DX(EndQuery(q_sync_point[q_sync_count]));
 
 	//******* Main calc - DEFERRER RENDERER
 	// Main calc
@@ -326,18 +366,11 @@ void CRender::Render()
 	}
 	Device.Statistic->RenderSSFX_Terrain.End();
 
-	bool	split_the_scene_to_minimize_wait = TRUE;
-
-
-	 
-
+ 	 
 	//******* Main render :: PART-0	-- first
-	if (split_the_scene_to_minimize_wait)
-	{
-  		Target->phase_scene_begin();
-		r_dsgraph_render_graph(0);
-		Target->disable_aniso();
-	}
+   	Target->phase_scene_begin();
+	r_dsgraph_render_graph(0);
+	Target->disable_aniso();
 
 	//  Redotix99: for 3D Shader Based Scopes 	
 	if (scope_3D_fake_enabled)
@@ -348,67 +381,19 @@ void CRender::Render()
 	}
 
 	//******* Occlusion testing of volume-limited light-sources
-	Target->phase_occq();
-	LP_normal.clear();
-	LP_pending.clear();
-	if (RImplementation.o.dx10_msaa)
-		RCache.set_ZB(RImplementation.Target->rt_MSAADepth->pZRT);
-
-
-	{
-		// perform tests
-		u32 count = 0;
-		light_Package& LP = Lights.package;
-
-		// stats
-		stats.l_shadowed = LP.v_shadowed.size();
-		stats.l_unshadowed = LP.v_point.size() + LP.v_spot.size();
-		stats.l_total = stats.l_shadowed + stats.l_unshadowed;
-
-		// perform tests
-		count = _max(count, LP.v_point.size());
-		count = _max(count, LP.v_spot.size());
-		count = _max(count, LP.v_shadowed.size());
-		for (u32 it = 0; it < count; it++)
-		{
-			if (it < LP.v_point.size())
-			{
-				light* L = LP.v_point[it];
-				L->vis_prepare();
-				if (L->vis.pending) LP_pending.v_point.push_back(L);
-				else LP_normal.v_point.push_back(L);
-			}
-			if (it < LP.v_spot.size())
-			{
-				light* L = LP.v_spot[it];
-				L->vis_prepare();
-				if (L->vis.pending) LP_pending.v_spot.push_back(L);
-				else LP_normal.v_spot.push_back(L);
-			}
-			if (it < LP.v_shadowed.size())
-			{
-				light* L = LP.v_shadowed[it];
-				L->vis_prepare();
-				if (L->vis.pending) LP_pending.v_shadowed.push_back(L);
-				else LP_normal.v_shadowed.push_back(L);
-			}
-		}
-	}
-	LP_normal.sort();
-	LP_pending.sort();
-
+	// Precalculate Lighting
+	render_pre_lights();
+	 
 	//******* Main render :: PART-1 (second)
-	if (split_the_scene_to_minimize_wait)
-	{
- 		// level
-		Target->phase_scene_begin();
-		r_dsgraph_render_hud();
-		r_dsgraph_render_lods(true, true);
-		if (Details) Details->Render();
-		if (ps_r2_ls_flags.test(R2FLAG_TERRAIN_PREPASS)) r_dsgraph_render_landscape(1, true);
-		Target->phase_scene_end();
-	}
-
+ 	Target->phase_scene_begin();
+	r_dsgraph_render_hud();
+	r_dsgraph_render_lods(true, true);
+	if (Details)
+		Details->Render();
+	if (ps_r2_ls_flags.test(R2FLAG_TERRAIN_PREPASS)) 
+		r_dsgraph_render_landscape(1, true);
+	Target->phase_scene_end();
+ 
 	// Wall marks
 	if (Wallmarks)
 	{
@@ -460,6 +445,7 @@ void CRender::Render()
 
 		if (RImplementation.o.ssfx_sss && !Device.m_SecondViewport.IsSVPFrame())
 		{
+			Device.Statistic->RenderSSS.Begin();
 			static bool sss_rendered, sss_extended_rendered;
 
 			// SSS Shadows
@@ -493,12 +479,15 @@ void CRender::Render()
 					HW.pContext->ClearRenderTargetView(Target->rt_ssfx_sss_tmp->pRT, ColorRGBA);
 				}
 			}
+
+			Device.Statistic->RenderSSS.End();
 		}
 	}
 
 	// Directional light - fucking sun
 	if (bSUN) //bSUN && Device.dwFrame & 1 --Delayed sun update. Worth to check it in future
 	{
+		Device.Statistic->RenderSun.Begin();
 		PIX_EVENT(DEFER_SUN);
 		RImplementation.stats.l_visible ++;
 		if (!ps_r2_ls_flags_ext.is(R2FLAGEXT_SUN_OLD))
@@ -510,8 +499,11 @@ void CRender::Render()
 			render_sun_filtered();
 		}
 		Target->accum_direct_blend();
+		Device.Statistic->RenderSun.End();
 	}
 
+
+	Device.Statistic->RenderEmissive.Begin();
 	{
 		PIX_EVENT(DEFER_SELF_ILLUM);
 		Target->phase_accumulator();
@@ -525,7 +517,7 @@ void CRender::Render()
 		else
 			RCache.set_Stencil(TRUE, D3DCMP_ALWAYS, 0x01, 0xff, 0x7f, D3DSTENCILOP_KEEP, D3DSTENCILOP_REPLACE,
 			                   D3DSTENCILOP_KEEP);
-		//RCache.set_Stencil				(TRUE,D3DCMP_ALWAYS,0x00,0xff,0xff,D3DSTENCILOP_KEEP,D3DSTENCILOP_REPLACE,D3DSTENCILOP_KEEP);
+ 
 		RCache.set_CullMode(CULL_CCW);
 		RCache.set_ColorWriteEnable();
 		RImplementation.r_dsgraph_render_emissive(RImplementation.o.ssfx_bloom ? false : true);
@@ -539,7 +531,10 @@ void CRender::Render()
 		Target->u_setrt(Target->rt_ssfx_bloom_emissive, NULL, NULL, !RImplementation.o.dx10_msaa ? HW.pBaseZB : Target->rt_MSAADepth->pZRT);
 		RImplementation.r_dsgraph_render_emissive(true, true);
 	}
+	Device.Statistic->RenderEmissive.End();
 
+
+	Device.Statistic->RenderLights.Begin();
 	// Lighting, non dependant on OCCQ
 	{
 		PIX_EVENT(DEFER_LIGHT_NO_OCCQ);
@@ -558,6 +553,9 @@ void CRender::Render()
 		if (RImplementation.o.ssfx_volumetric)
 			Target->phase_ssfx_volumetric_blur();
 	}
+	Device.Statistic->RenderLights.End();
+
+	Device.Statistic->Render_postprocess.Begin();
 
 	// Postprocess
 	{
@@ -569,6 +567,8 @@ void CRender::Render()
 		Details->details_clear();
 
 	VERIFY(0 == mapDistort.size() + mapHUDDistort.size());
+
+	Device.Statistic->Render_postprocess.End();
 }
 
 void CRender::render_forward()
@@ -588,8 +588,7 @@ void CRender::render_forward()
 		r_dsgraph_render_graph(1); // normal level, secondary priority
 		PortalTraverser.fade_render(); // faded-portals
 		r_dsgraph_render_sorted(); // strict-sorted geoms
-		//g_pGamePersistent->Environment().RenderLast(); // rain/thunder-bolts
-	}
+ 	}
 
 	RImplementation.o.distortion = FALSE; // disable distorion
 }

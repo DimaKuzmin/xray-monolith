@@ -400,14 +400,7 @@ struct path_excluder_predicate
 BOOL g_bIntroFinished = FALSE;
 extern float g_fTimeFactor;
 
-void InitEngine()
-{
-	Engine.Initialize();
-	while (!g_bIntroFinished)
-		Sleep(100);
-	Device.Initialize();
-}
-
+ 
 void InitSettings()
 {
 	string_path fname;

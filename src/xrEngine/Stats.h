@@ -80,21 +80,15 @@ public:
 	//RENDER
 	CStatTimer	RenderTOTAL;		// 
 	CStatTimer	RenderTOTAL_Real;
+
 	CStatTimer	RenderCALC;			// portal traversal, frustum culling, entities "renderable_Render"
 	CStatTimer	RenderCALC_HOM;		// HOM rendering
 
 	CStatTimer	Animation;			// skeleton calculation
+	CStatTimer	RenderGPU;			// ...waiting something back (queries results, etc.)
  
-	// Secondary Прогод по графу
-	CStatTimer	RenderDUMP;			// actual primitive rendering
-	CStatTimer	RenderDUMP_Second;			// actual primitive rendering
-
-	CStatTimer	RenderDUMP_Wait;	// ...waiting something back (queries results, etc.)
- 	CStatTimer	RenderDUMP_Lights;	// ...d-lights building/rendering
-
 	// DETAILS
 	CStatTimer	RenderDUMP_DT_VIS;	// ...details visibility detection
-	CStatTimer	RenderDUMP_DT_Render;// ...details rendering
 	CStatTimer	RenderDUMP_DT_Cache;// ...details slot cache access
 	u32			RenderDUMP_DT_Count;// ...number of DT-elements
 	 
@@ -103,8 +97,11 @@ public:
 	CStatTimer	Particles_render_Time;
  
 	// NEW RENDER PARAMS
+	CStatTimer RenderMainPPUI;
+
+	// 
 	CStatTimer RenderMain;
-	CStatTimer RenderMain_Calcualte;
+	CStatTimer RenderMainVIS_HUD;
 	CStatTimer RenderMainVIS_Static;
 	CStatTimer RenderMainVIS_StaticTraverce;
 	CStatTimer RenderMainVIS_Dynamic;
@@ -112,7 +109,19 @@ public:
 	CStatTimer RenderSubspace;
 	CStatTimer RenderSun;
 	CStatTimer RenderLights;
+
+
+	CStatTimer RenderSSS;
+	CStatTimer RenderEmissive;
  	CStatTimer Render_postprocess;
+
+
+	// Real Rendering
+	CStatTimer	RenderDUMP;				// actual primitive rendering
+	CStatTimer	RenderDUMP_Second;		// actual primitive rendering
+
+	CStatTimer	RenderDUMP_DT_Render;	// ...details rendering
+
 };
 
 class ENGINE_API CStatNetwork

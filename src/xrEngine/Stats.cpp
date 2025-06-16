@@ -225,13 +225,10 @@ void CStats::Show()
 
   	if (psDeviceFlags.test(rsStatistic))
 	{
-		pFontGame->SetHeightI(0.024f);
+		pFontGame->SetHeightI(0.028f);
 		F.SetColor(color_rgba(128, 128, 192, 255));
 		F.OutSet(1550, 20);
-	}
-
-	if (psDeviceFlags.test(rsStatistic))
-	{
+	 
 		F.SetColor(color_rgba(128, 128, 192, 255));
 		F.OutNext("FPS:   %3.0f", fFPS);
 
@@ -241,34 +238,40 @@ void CStats::Show()
 
 		drawStatParam(pFontGame, "----------------");
 
-		drawStatParamByMS(10, pFontGame, this, "EngineFrame:		%2.4fms", EngineFrame.result);
+		drawStatParamByMS(10, pFontGame, this, "EngineFrame:				%2.4fms", EngineFrame.result);
 
- 		drawStatParamByMS(10, pFontGame, this, "uUpdateCL:			%2.4fms | %2.4fms(relcase)", UpdateClient.result, NetworkRelcase.result);
-		drawStatParamByMS(10, pFontGame, this, "uShedule:			%2.4fms | %2.4fms(low)", Sheduler.result, ShedulerLow.result);
-
-		drawStatParam(pFontGame, "----------------");
-		drawStatParamByMS(6, pFontGame, this, "Render:				%2.4fms", RenderTOTAL_Real.result);
+ 		drawStatParamByMS(10, pFontGame, this, "uUpdateCL:					%2.4fms | %2.4fms(relcase)", UpdateClient.result, NetworkRelcase.result);
+		drawStatParamByMS(10, pFontGame, this, "uShedule:					%2.4fms | %2.4fms(low)", Sheduler.result, ShedulerLow.result);
 
 		drawStatParam(pFontGame, "----------------");
-		drawStatParamByMS(1, pFontGame, this, "Render Wait Gpus:	%2.4fms", RenderDUMP_Wait.result);
+		drawStatParamByMS(6, pFontGame, this, "Render:						%2.4fms", RenderTOTAL_Real.result);
+ 
+		drawStatParam(pFontGame, "----------------");
+		drawStatParamByMS(1, pFontGame, this, "Render Wait Gpus:			%2.4fms",	  RenderGPU.result);
+ 		
+		// drawStatParamByMS(1, pFontGame, this, "Render Build HUD:			%2.4fms", RenderMainVIS_HUD.result);
+		// drawStatParamByMS(1, pFontGame, this, "Render Build Traverse:		%2.4fms", RenderMainVIS_StaticTraverce.result);
 
-		// drawStatParamByMS(1, pFontGame, this, "Render Water Reflaction: %2.4fms", RenderWaterReflection.result);
-		drawStatParamByMS(1, pFontGame, this, "Render Build Static:		%2.4fms", RenderMainVIS_Static.result);
-		drawStatParamByMS(1, pFontGame, this, "Render Build Dynamic:	%2.4fms", RenderMainVIS_Dynamic.result);
-		drawStatParamByMS(1, pFontGame, this, "Render Build Traverse:	%2.4fms", RenderMainVIS_StaticTraverce.result);
-		drawStatParamByMS(1, pFontGame, this, "Render Build Subspace:	%2.4fms", RenderSubspace.result);
+ 		drawStatParamByMS(1, pFontGame, this, "Render Build Static:			%2.4fms", RenderMainVIS_Static.result);
+		drawStatParamByMS(1, pFontGame, this, "Render Build Dynamic:		%2.4fms", RenderMainVIS_Dynamic.result);
+		drawStatParamByMS(1, pFontGame, this, "Render Build Subspace:		%2.4fms", RenderSubspace.result);
 
-		drawStatParamByMS(3, pFontGame, this, "Render GPU Draw:	%2.4fms", RenderDUMP.result);
-		drawStatParamByMS(1, pFontGame, this, "Render GPU DrawFwd:	%2.4fms", RenderDUMP_Second.result);
+		drawStatParamByMS(3, pFontGame, this, "Render GPU Draw:				%2.4fms", RenderDUMP.result);
+		drawStatParamByMS(1, pFontGame, this, "Render GPU DrawFwd:			%2.4fms", RenderDUMP_Second.result);
+
+		drawStatParamByMS(1, pFontGame, this, "Render Animation:			%2.4fms", Animation.result);
 
 		drawStatParam(pFontGame, "----------------");
-		drawStatParamByMS(2, pFontGame, this, "R_Main_Sun:			%2.4fms", RenderSun.result);
-		drawStatParamByMS(2, pFontGame, this, "R_Main_Lights:		%2.4fms", RenderLights.result);
-		drawStatParamByMS(2, pFontGame, this, "R_Postprocess:		%2.4fms", Render_postprocess.result);
+		drawStatParamByMS(2, pFontGame, this, "R_MainSSS:					%2.4fms", RenderSSS.result);
+		drawStatParamByMS(2, pFontGame, this, "R_MainEmissive:				%2.4fms", RenderEmissive.result);
 
-		drawStatParamByMS(1, pFontGame, this, "RDT_Ren:   %2.4fms", RenderDUMP_DT_Render.result);
-		drawStatParamByMS(1, pFontGame, this, "RDT_Vis:   %2.4fms", RenderDUMP_DT_VIS.result);
-		drawStatParamByMS(1, pFontGame, this, "RDT_Cache: %2.4fms", RenderDUMP_DT_Cache.result);
+		drawStatParamByMS(2, pFontGame, this, "R_Main_Sun:					%2.4fms", RenderSun.result);
+		drawStatParamByMS(2, pFontGame, this, "R_Main_Lights:				%2.4fms", RenderLights.result);
+		drawStatParamByMS(2, pFontGame, this, "R_Postprocess:				%2.4fms", Render_postprocess.result);
+
+		drawStatParamByMS(1, pFontGame, this, "RDT_Ren:						%2.4fms", RenderDUMP_DT_Render.result);
+		drawStatParamByMS(1, pFontGame, this, "RDT_Vis:						%2.4fms", RenderDUMP_DT_VIS.result);
+		drawStatParamByMS(1, pFontGame, this, "RDT_Cache:					%2.4fms", RenderDUMP_DT_Cache.result);
 
 		float build_graph = RenderMainVIS_Static.result + RenderMainVIS_Dynamic.result + RenderMainVIS_StaticTraverce.result;
 		float render_graph = RenderDUMP.result + RenderDUMP_Second.result + RenderSun.result + RenderLights.result + Render_postprocess.result;
@@ -284,12 +287,13 @@ void CStats::Show()
 		// drawStatParamBy(pFontGame, this, "Draw Pollys:			%u", polys);
 	}
 
+
 	if (psDeviceFlags.test(rsCameraPos))
- 		_draw_cam_pos(pFontGame);
- 	pFontGame->OnRender();
- 	
-	dwSND_Played				= dwSND_Allocated = 0;
-	Particles_starting			= Particles_active = Particles_destroy = 0;
+		_draw_cam_pos(pFontGame);
+	pFontGame->OnRender();
+
+	dwSND_Played = dwSND_Allocated = 0;
+	Particles_starting = Particles_active = Particles_destroy = 0;
 	FrameEnd();
 }
 

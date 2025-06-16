@@ -589,9 +589,6 @@ void CRenderDevice::OnWM_Activate(WPARAM wParam, LPARAM lParam)
 			app_inactive_time += TimerMM.GetElapsed_ms() - app_inactive_time_start;
 
 #ifndef DEDICATED_SERVER
-# ifdef INGAME_EDITOR
-            if (!editor())
-# endif // #ifdef INGAME_EDITOR
 			ShowCursor(FALSE);
 			if (m_hWnd)
 			{

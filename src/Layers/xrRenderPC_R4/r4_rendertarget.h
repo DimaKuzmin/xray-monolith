@@ -4,10 +4,6 @@
 #include "light_db.h"
 class light;
 
-//#define DU_SPHERE_NUMVERTEX 92
-//#define DU_SPHERE_NUMFACES	180
-//#define DU_CONE_NUMVERTEX	18
-//#define DU_CONE_NUMFACES	32
 //	no less than 2
 #define	VOLUMETRIC_SLICES	100
 
@@ -386,12 +382,15 @@ private:
 public:
 	CRenderTarget();
 	~CRenderTarget();
+
+
 	void accum_point_geom_create();
 	void accum_point_geom_destroy();
 	void accum_omnip_geom_create();
 	void accum_omnip_geom_destroy();
 	void accum_spot_geom_create();
 	void accum_spot_geom_destroy();
+	
 	//	Igor: used for volumetric lights
 	void accum_volumetric_geom_create();
 	void accum_volumetric_geom_destroy();
@@ -469,7 +468,6 @@ public:
 
 	BOOL enable_scissor(light* L); // true if intersects near plane
 	void enable_dbt_bounds(light* L);
-
 	void disable_aniso();
 
 	void draw_volume(light* L);
@@ -482,11 +480,13 @@ public:
 	void accum_point(light* L);
 	void accum_spot(light* L);
 	void accum_reflected(light* L);
+
 	//	Igor: for volumetric lights
 	void accum_volumetric(light* L);
 	void phase_bloom();
 	void phase_luminance();
-	void phase_combine();
+	
+
 	void phase_combine_volumetric();
 	void phase_pp();
 
@@ -517,25 +517,18 @@ public:
 	void reset_light_marker(bool bResetStencil = false);
 	void increment_light_marker();
 
+	// combine splitted
+	void phase_combine();
+	void phase_combine_2(u32& Offset, Fvector2& p0, Fvector2& p1, bool bDistort);
+	void phase_combine_ssao(u32& Offset);
+	void phase_ssfx_combine();
+
+
+	// stuff calculation
+	void CalculateBlur();
 	void DoAsyncScreenshot();
+ 
+	IC void dbg_addline(Fvector& P0, Fvector& P1, u32 c) {}
 
-#ifdef DEBUG
-	IC void						dbg_addline				(Fvector& P0, Fvector& P1, u32 c)					{
-		dbg_lines.push_back		(dbg_line_t());
-		dbg_lines.back().P0		= P0;
-		dbg_lines.back().P1		= P1;
-		dbg_lines.back().color	= c;
-	}
-	IC void						dbg_addplane			(Fplane& P0,  u32 c)								{
-		dbg_planes.push_back(P0);
-	}
-#else
-	IC void dbg_addline(Fvector& P0, Fvector& P1, u32 c)
-	{
-	}
-
-	IC void dbg_addplane(Fplane& P0, u32 c)
-	{
-	}
-#endif
+	IC void dbg_addplane(Fplane& P0, u32 c)	{}
 };

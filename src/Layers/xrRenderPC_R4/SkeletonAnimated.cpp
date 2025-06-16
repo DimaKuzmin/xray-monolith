@@ -389,16 +389,16 @@ CBlend* CKinematicsAnimated::LL_PlayCycle(u16 part, MotionID motion_ID, BOOL bMi
 	// Process old cycles and create _new_
 	if (channel == 0)
 	{
-		_DBG_SINGLE_USE_MARKER;
-		if (bMixing) LL_FadeCycle(part, blendFalloff, 1 << channel);
-		else LL_CloseCycle(part, 1 << channel);
+ 		if (bMixing)
+			LL_FadeCycle(part, blendFalloff, 1 << channel);
+		else
+			LL_CloseCycle(part, 1 << channel);
 	}
 	CPartDef& P = (*m_Partition)[part];
 	CBlend* B = IBlend_Create();
 	if (!B) return 0;
 
-	_DBG_SINGLE_USE_MARKER;
-	IBlendSetup(*B, part, channel, motion_ID, bMixing, blendAccrue, blendFalloff, Speed, noloop, Callback,
+ 	IBlendSetup(*B, part, channel, motion_ID, bMixing, blendAccrue, blendFalloff, Speed, noloop, Callback,
 	            CallbackParam);
 	for (u32 i = 0; i < P.bones.size(); i++)
 	{
@@ -512,8 +512,7 @@ CBlend* CKinematicsAnimated::LL_PlayFX(u16 bone, MotionID motion_ID, float blend
 	CBlend* B = IBlend_Create();
 	if (!B) return 0;
 
-	_DBG_SINGLE_USE_MARKER;
-	IFXBlendSetup(*B, motion_ID, blendAccrue, blendFalloff, Power, Speed, bone);
+ 	IFXBlendSetup(*B, motion_ID, blendAccrue, blendFalloff, Power, Speed, bone);
 	Bone_Motion_Start((*bones)[bone], B);
 
 	blend_fx.push_back(B);
@@ -624,8 +623,8 @@ void CKinematicsAnimated::LL_UpdateFxTracks(float dt)
 
 void CKinematicsAnimated::UpdateTracks()
 {
-	_DBG_SINGLE_USE_MARKER;
-	if (Update_LastTime == RDEVICE.dwTimeGlobal) return;
+ 	if (Update_LastTime == RDEVICE.dwTimeGlobal) 
+		return;
 	u32 DT = RDEVICE.dwTimeGlobal - Update_LastTime;
 	if (DT > 66) DT = 66;
 	float dt = float(DT) / 1000.f;
@@ -730,11 +729,9 @@ void CKinematicsAnimated::LL_SetChannelFactor(u16 channel, float factor)
 
 void CKinematicsAnimated::IBlend_Startup()
 {
-	_DBG_SINGLE_USE_MARKER;
-	CBlend B;
+ 	CBlend B;
 	ZeroMemory(&B, sizeof(B));
-	//B.blend				= CBlend::eFREE_SLOT;
-
+ 
 	B.set_free_state();
 
 #ifdef	DEBUG
@@ -759,11 +756,11 @@ void CKinematicsAnimated::IBlend_Startup()
 CBlend* CKinematicsAnimated::IBlend_Create()
 {
 	UpdateTracks();
-	_DBG_SINGLE_USE_MARKER;
-	CBlend *I = blend_pool.begin(), *E = blend_pool.end();
+ 	CBlend *I = blend_pool.begin(), *E = blend_pool.end();
+
 	for (; I != E; I++)
 		if (I->blend_state() == CBlend::eFREE_SLOT) return I;
-//	FATAL("Too many blended motions requested");
+ 
 	return 0;
 }
 

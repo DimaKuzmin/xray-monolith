@@ -209,6 +209,10 @@ private:
 
 public:
 	IRender_Sector* rimp_detectSector(Fvector& P, Fvector& D);
+	
+  	void render_pre_lights();
+
+
 	void render_main(Fmatrix& mCombined, bool _fportals);
 	void render_forward();
 	void render_Reticle();
@@ -219,6 +223,7 @@ public:
 	void render_sun_near();
 	void render_sun_filtered();
 	void render_menu();
+
 	void render_rain();
 
 	void render_sun_cascade(u32 cascade_ind);
