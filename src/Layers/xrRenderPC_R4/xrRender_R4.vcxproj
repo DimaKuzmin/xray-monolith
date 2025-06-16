@@ -132,6 +132,7 @@
     <ClInclude Include="xrRenderDX10\StateManager\dx10StateCache.h" />
     <ClInclude Include="xrRenderDX10\StateManager\dx10StateCacheImpl.h" />
     <ClInclude Include="xrRenderDX10\StateManager\dx10StateManager.h" />
+
     <ClInclude Include="Animation.h" />
     <ClInclude Include="blenders\Blender.h" />
     <ClInclude Include="blenders\Blender_CLSID.h" />
@@ -260,6 +261,10 @@
     <ClInclude Include="blender_smaa.h" />
     <ClInclude Include="blender_ssao.h" />
     <ClInclude Include="blender_ss_sunshafts.h" />
+	<ClInclude Include="blender_hdr10_bloom.h" />
+	<ClInclude Include="blender_hdr10_lens_flare.h" />
+	
+	
     <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="CSCompiler.h" />
     <ClInclude Include="DetailFormat.h" />
@@ -325,6 +330,13 @@
     <ClCompile Include="Blender_Recorder_StandartBinding.cpp" />
     <ClCompile Include="Blender_Screen_SET.cpp" />
     <ClCompile Include="Blender_tree.cpp" />
+	
+	<ClCompile Include="blender_hdr10_bloom.cpp" />
+	<ClCompile Include="blender_hdr10_lens_flare.cpp" />
+	
+	<ClCompile Include="r4_rendertarget_phase_hdr10_bloom.cpp" />
+	<ClCompile Include="r4_rendertarget_phase_hdr10_lens_flare.cpp" />
+		 
     <ClCompile Include="ColorMapManager.cpp" />
     <ClCompile Include="D3DUtils.cpp" />
     <ClCompile Include="Debug\dxPixEventWrapper.cpp" />
