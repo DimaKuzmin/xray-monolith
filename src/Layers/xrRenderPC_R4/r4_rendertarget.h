@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../xrRender/ColorMapManager.h"
-#include "../xrRender/light_db.h"
+#include "ColorMapManager.h"
+#include "light_db.h"
 class light;
 
 //#define DU_SPHERE_NUMVERTEX 92

@@ -1,41 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Release-AVX|x64">
-      <Configuration>Release-AVX</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="VerifiedDX11|x64">
-      <Configuration>VerifiedDX11</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{AC9B12ED-A2D7-4337-A981-5BD8430E96D8}</ProjectGuid>
     <RootNamespace>xrRender_R4</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{AC9B12ED-A2D7-4337-A981-5BD8430E96D8}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
-    <WholeProgramOptimization>false</WholeProgramOptimization>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VerifiedDX11|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
-    <WholeProgramOptimization>false</WholeProgramOptimization>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-AVX|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
@@ -47,31 +27,11 @@
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
     <Import Project="$(SolutionDir)Common.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='VerifiedDX11|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
-    <Import Project="$(SolutionDir)Common.props" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-AVX|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
-    <Import Project="$(SolutionDir)Common.props" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(xrGameDir)bin_dbg\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(xrIntDir)$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VerifiedDX11|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(xrGameDir)bin_dbg\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(xrIntDir)$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-AVX|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(xrGameDir)bin_dbg\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(xrIntDir)$(ProjectName)\</IntDir>
@@ -98,96 +58,12 @@
       <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalOptions>-Zm113 %(AdditionalOptions)</AdditionalOptions>
       <UndefinePreprocessorDefinitions>USE_LUAJIT_ONE</UndefinePreprocessorDefinitions>
       <DisableSpecificWarnings>4005;4099</DisableSpecificWarnings>
-    </ClCompile>
-    <Link>
-      <AdditionalDependencies>dxguid.lib;d3dx11.lib;D3DCompiler.lib;d3d11.lib;dxgi.lib;nvapi.lib;dxerr.lib;d3d10.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rd party\luajit-2\src\;$(xrSdkDir)libraries\x64;$(xrLibDir);$(DXSDK_DIR)Lib\x86;$(XRAY_16X_LIBS)OpenAutomate\libraries;$(SolutionDir)x64\Release;$(xrGameDir)bin_dbg;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>NotSet</SubSystem>
-      <LargeAddressAware>true</LargeAddressAware>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <ImportLibrary>$(xrLibDir)$(TargetName).lib</ImportLibrary>
-      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='VerifiedDX11|x64'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <OmitFramePointers>false</OmitFramePointers>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>.;$(SolutionDir)3rd party\luajit-2\src\;$(SolutionDir)3rd party\luabind\;$(xrSdkDir)include;$(XRAY_16X_LIBS)OpenAutomate\inc;$(XRAY_16X_LIBS)nvapi;$(DXSDK_DIR)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>USE_VERIFY_IN_RELEASE;USE_DX11;WIN32;NDEBUG;_WINDOWS;_USRDLL;XRRENDER_R4_EXPORTS;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling>
-      </ExceptionHandling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalOptions>-Zm113 %(AdditionalOptions)</AdditionalOptions>
-      <UndefinePreprocessorDefinitions>USE_LUAJIT_ONE</UndefinePreprocessorDefinitions>
-      <DisableSpecificWarnings>4005;4099</DisableSpecificWarnings>
-      <MinimalRebuild>true</MinimalRebuild>
-      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
-    </ClCompile>
-    <Link>
-      <AdditionalDependencies>dxguid.lib;d3dx11.lib;D3DCompiler.lib;d3d11.lib;dxgi.lib;nvapi.lib;dxerr.lib;d3d10.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rd party\luajit-2\src\;$(xrSdkDir)libraries\x64;$(xrLibDir);$(DXSDK_DIR)Lib\x86;$(XRAY_16X_LIBS)OpenAutomate\libraries;$(SolutionDir)x64\Release;$(xrGameDir)bin_dbg;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>NotSet</SubSystem>
-      <LargeAddressAware>true</LargeAddressAware>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <ImportLibrary>$(xrLibDir)$(TargetName).lib</ImportLibrary>
-      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-AVX|x64'">
-    <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>true</OmitFramePointers>
-      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>.;$(SolutionDir)3rd party\luajit-2\src\;$(SolutionDir)3rd party\luabind\;$(xrSdkDir)include;$(XRAY_16X_LIBS)OpenAutomate\inc;$(XRAY_16X_LIBS)nvapi;$(DXSDK_DIR)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>USE_DX11;WIN32;NDEBUG;_WINDOWS;_USRDLL;XRRENDER_R4_EXPORTS;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
-      <ExceptionHandling>
-      </ExceptionHandling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalOptions>-Zm113 %(AdditionalOptions)</AdditionalOptions>
-      <UndefinePreprocessorDefinitions>USE_LUAJIT_ONE</UndefinePreprocessorDefinitions>
-      <DisableSpecificWarnings>4005;4099</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>dxguid.lib;d3dx11.lib;D3DCompiler.lib;d3d11.lib;dxgi.lib;nvapi.lib;dxerr.lib;d3d10.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -231,136 +107,137 @@
     <ClInclude Include="..\..\Include\xrRender\UISequenceVideoItem.h" />
     <ClInclude Include="..\..\Include\xrRender\UIShader.h" />
     <ClInclude Include="..\..\Include\xrRender\WallMarkArray.h" />
-    <ClInclude Include="..\xrRenderDX10\3DFluid\dx103DFluidBlenders.h" />
-    <ClInclude Include="..\xrRenderDX10\3DFluid\dx103DFluidData.h" />
-    <ClInclude Include="..\xrRenderDX10\3DFluid\dx103DFluidEmitters.h" />
-    <ClInclude Include="..\xrRenderDX10\3DFluid\dx103DFluidGrid.h" />
-    <ClInclude Include="..\xrRenderDX10\3DFluid\dx103DFluidManager.h" />
-    <ClInclude Include="..\xrRenderDX10\3DFluid\dx103DFluidObstacles.h" />
-    <ClInclude Include="..\xrRenderDX10\3DFluid\dx103DFluidRenderer.h" />
-    <ClInclude Include="..\xrRenderDX10\3DFluid\dx103DFluidVolume.h" />
-    <ClInclude Include="..\xrRenderDX10\DX10 Rain\dx10RainBlender.h" />
-    <ClInclude Include="..\xrRenderDX10\dx10BufferUtils.h" />
-    <ClInclude Include="..\xrRenderDX10\dx10ConstantBuffer.h" />
-    <ClInclude Include="..\xrRenderDX10\dx10ConstantBuffer_impl.h" />
-    <ClInclude Include="..\xrRenderDX10\dx10R_Backend_Runtime.h" />
-    <ClInclude Include="..\xrRenderDX10\dx10r_constants_cache.h" />
-    <ClInclude Include="..\xrRenderDX10\dx10StateUtils.h" />
-    <ClInclude Include="..\xrRenderDX10\dx10TextureUtils.h" />
-    <ClInclude Include="..\xrRenderDX10\DXCommonTypes.h" />
-    <ClInclude Include="..\xrRenderDX10\MSAA\dx10MSAABlender.h" />
-    <ClInclude Include="..\xrRenderDX10\StateManager\dx10SamplerStateCache.h" />
-    <ClInclude Include="..\xrRenderDX10\StateManager\dx10ShaderResourceStateCache.h" />
-    <ClInclude Include="..\xrRenderDX10\StateManager\dx10State.h" />
-    <ClInclude Include="..\xrRenderDX10\StateManager\dx10StateCache.h" />
-    <ClInclude Include="..\xrRenderDX10\StateManager\dx10StateCacheImpl.h" />
-    <ClInclude Include="..\xrRenderDX10\StateManager\dx10StateManager.h" />
-    <ClInclude Include="..\xrRender\Animation.h" />
-    <ClInclude Include="..\xrRender\blenders\Blender.h" />
-    <ClInclude Include="..\xrRender\blenders\Blender_CLSID.h" />
-    <ClInclude Include="..\xrRender\blenders\Blender_Recorder.h" />
-    <ClInclude Include="..\xrRender\Blender_BmmD.h" />
-    <ClInclude Include="..\xrRender\Blender_detail_still.h" />
-    <ClInclude Include="..\xrRender\Blender_Editor_Selection.h" />
-    <ClInclude Include="..\xrRender\Blender_Editor_Wire.h" />
-    <ClInclude Include="..\xrRender\Blender_Lm(EbB).h" />
-    <ClInclude Include="..\xrRender\Blender_Model_EbB.h" />
-    <ClInclude Include="..\xrRender\Blender_Particle.h" />
-    <ClInclude Include="..\xrRender\Blender_Screen_SET.h" />
-    <ClInclude Include="..\xrRender\Blender_tree.h" />
-    <ClInclude Include="..\xrRender\ColorMapManager.h" />
-    <ClInclude Include="..\xrRender\D3DUtils.h" />
-    <ClInclude Include="..\xrRender\Debug\dxPixEventWrapper.h" />
-    <ClInclude Include="..\xrRender\DetailManager.h" />
-    <ClInclude Include="..\xrRender\DetailModel.h" />
-    <ClInclude Include="..\xrRender\du_box.h" />
-    <ClInclude Include="..\xrRender\du_cone.h" />
-    <ClInclude Include="..\xrRender\du_cylinder.h" />
-    <ClInclude Include="..\xrRender\du_sphere.h" />
-    <ClInclude Include="..\xrRender\du_sphere_part.h" />
-    <ClInclude Include="..\xrRender\dxApplicationRender.h" />
-    <ClInclude Include="..\xrRender\dxConsoleRender.h" />
-    <ClInclude Include="..\xrRender\dxDebugRender.h" />
-    <ClInclude Include="..\xrRender\dxEnvironmentRender.h" />
-    <ClInclude Include="..\xrRender\dxFontRender.h" />
-    <ClInclude Include="..\xrRender\dxLensFlareRender.h" />
-    <ClInclude Include="..\xrRender\dxObjectSpaceRender.h" />
-    <ClInclude Include="..\xrRender\dxParticleCustom.h" />
-    <ClInclude Include="..\xrRender\dxRainRender.h" />
-    <ClInclude Include="..\xrRender\dxRenderDeviceRender.h" />
-    <ClInclude Include="..\xrRender\dxRenderFactory.h" />
-    <ClInclude Include="..\xrRender\dxStatGraphRender.h" />
-    <ClInclude Include="..\xrRender\dxStatsRender.h" />
-    <ClInclude Include="..\xrRender\dxThunderboltDescRender.h" />
-    <ClInclude Include="..\xrRender\dxThunderboltRender.h" />
-    <ClInclude Include="..\xrRender\dxUIRender.h" />
-    <ClInclude Include="..\xrRender\dxUISequenceVideoItem.h" />
-    <ClInclude Include="..\xrRender\dxUIShader.h" />
-    <ClInclude Include="..\xrRender\dxWallMarkArray.h" />
-    <ClInclude Include="..\xrRender\ETextureParams.h" />
-    <ClInclude Include="..\xrRender\FBasicVisual.h" />
-    <ClInclude Include="..\xrRender\FHierrarhyVisual.h" />
-    <ClInclude Include="..\xrRender\FLOD.h" />
-    <ClInclude Include="..\xrRender\FProgressive.h" />
-    <ClInclude Include="..\xrRender\FSkinned.h" />
-    <ClInclude Include="..\xrRender\FTreeVisual.h" />
-    <ClInclude Include="..\xrRender\FVF.h" />
-    <ClInclude Include="..\xrRender\FVisual.h" />
-    <ClInclude Include="..\xrRender\HOM.h" />
-    <ClInclude Include="..\xrRender\HW.h" />
-    <ClInclude Include="..\xrRender\HWCaps.h" />
-    <ClInclude Include="..\xrRender\IRenderDetailModel.h" />
-    <ClInclude Include="..\xrRender\LightTrack.h" />
-    <ClInclude Include="..\xrRender\Light_DB.h" />
-    <ClInclude Include="..\xrRender\Light_Package.h" />
-    <ClInclude Include="..\xrRender\ModelPool.h" />
-    <ClInclude Include="..\xrRender\NvTriStrip.h" />
-    <ClInclude Include="..\xrRender\NvTriStripObjects.h" />
-    <ClInclude Include="..\xrRender\occRasterizer.h" />
-    <ClInclude Include="..\xrRender\ParticleEffect.h" />
-    <ClInclude Include="..\xrRender\ParticleEffectActions.h" />
-    <ClInclude Include="..\xrRender\ParticleEffectDef.h" />
-    <ClInclude Include="..\xrRender\ParticleGroup.h" />
-    <ClInclude Include="..\xrRender\PSLibrary.h" />
-    <ClInclude Include="..\xrRender\QueryHelper.h" />
-    <ClInclude Include="..\xrRender\ResourceManager.h" />
-    <ClInclude Include="..\xrRender\R_Backend.h" />
-    <ClInclude Include="..\xrRender\R_Backend_hemi.h" />
-    <ClInclude Include="..\xrRender\R_Backend_Runtime.h" />
-    <ClInclude Include="..\xrRender\R_Backend_tree.h" />
-    <ClInclude Include="..\xrRender\R_Backend_xform.h" />
-    <ClInclude Include="..\xrRender\r_constants.h" />
-    <ClInclude Include="..\xrRender\r_constants_cache.h" />
-    <ClInclude Include="..\xrRender\R_DStreams.h" />
-    <ClInclude Include="..\xrRender\r_sun_cascades.h" />
-    <ClInclude Include="..\xrRender\r__dsgraph_structure.h" />
-    <ClInclude Include="..\xrRender\r__dsgraph_types.h" />
-    <ClInclude Include="..\xrRender\r__occlusion.h" />
-    <ClInclude Include="..\xrRender\r__pixel_calculator.h" />
-    <ClInclude Include="..\xrRender\r__sector.h" />
-    <ClInclude Include="..\xrRender\Shader.h" />
-    <ClInclude Include="..\xrRender\ShaderResourceTraits.h" />
-    <ClInclude Include="..\xrRender\SH_Atomic.h" />
-    <ClInclude Include="..\xrRender\SH_Constant.h" />
-    <ClInclude Include="..\xrRender\SH_Matrix.h" />
-    <ClInclude Include="..\xrRender\SH_RT.h" />
-    <ClInclude Include="..\xrRender\SH_Texture.h" />
-    <ClInclude Include="..\xrRender\SkeletonAnimated.h" />
-    <ClInclude Include="..\xrRender\SkeletonCustom.h" />
-    <ClInclude Include="..\xrRender\SkeletonX.h" />
-    <ClInclude Include="..\xrRender\stats_manager.h" />
-    <ClInclude Include="..\xrRender\TextureDescrManager.h" />
-    <ClInclude Include="..\xrRender\tga.h" />
-    <ClInclude Include="..\xrRender\tss.h" />
-    <ClInclude Include="..\xrRender\tss_def.h" />
-    <ClInclude Include="..\xrRender\uber_deffer.h" />
-    <ClInclude Include="..\xrRender\Utils\dxHashHelper.h" />
-    <ClInclude Include="..\xrRender\VertexCache.h" />
-    <ClInclude Include="..\xrRender\WallmarksEngine.h" />
-    <ClInclude Include="..\xrRender\xrD3DDefs.h" />
-    <ClInclude Include="..\xrRender\xrRender_console.h" />
-    <ClInclude Include="..\xrRender\xrStripify.h" />
-    <ClInclude Include="..\xrRender\xr_effgamma.h" />
+    <ClInclude Include="..\..\xrEngine\cl_intersect.h" />
+    <ClInclude Include="xrRenderDX10\3DFluid\dx103DFluidBlenders.h" />
+    <ClInclude Include="xrRenderDX10\3DFluid\dx103DFluidData.h" />
+    <ClInclude Include="xrRenderDX10\3DFluid\dx103DFluidEmitters.h" />
+    <ClInclude Include="xrRenderDX10\3DFluid\dx103DFluidGrid.h" />
+    <ClInclude Include="xrRenderDX10\3DFluid\dx103DFluidManager.h" />
+    <ClInclude Include="xrRenderDX10\3DFluid\dx103DFluidObstacles.h" />
+    <ClInclude Include="xrRenderDX10\3DFluid\dx103DFluidRenderer.h" />
+    <ClInclude Include="xrRenderDX10\3DFluid\dx103DFluidVolume.h" />
+    <ClInclude Include="xrRenderDX10\DX10 Rain\dx10RainBlender.h" />
+    <ClInclude Include="xrRenderDX10\dx10BufferUtils.h" />
+    <ClInclude Include="xrRenderDX10\dx10ConstantBuffer.h" />
+    <ClInclude Include="xrRenderDX10\dx10ConstantBuffer_impl.h" />
+    <ClInclude Include="xrRenderDX10\dx10R_Backend_Runtime.h" />
+    <ClInclude Include="xrRenderDX10\dx10r_constants_cache.h" />
+    <ClInclude Include="xrRenderDX10\dx10StateUtils.h" />
+    <ClInclude Include="xrRenderDX10\dx10TextureUtils.h" />
+    <ClInclude Include="xrRenderDX10\DXCommonTypes.h" />
+    <ClInclude Include="xrRenderDX10\MSAA\dx10MSAABlender.h" />
+    <ClInclude Include="xrRenderDX10\StateManager\dx10SamplerStateCache.h" />
+    <ClInclude Include="xrRenderDX10\StateManager\dx10ShaderResourceStateCache.h" />
+    <ClInclude Include="xrRenderDX10\StateManager\dx10State.h" />
+    <ClInclude Include="xrRenderDX10\StateManager\dx10StateCache.h" />
+    <ClInclude Include="xrRenderDX10\StateManager\dx10StateCacheImpl.h" />
+    <ClInclude Include="xrRenderDX10\StateManager\dx10StateManager.h" />
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="blenders\Blender.h" />
+    <ClInclude Include="blenders\Blender_CLSID.h" />
+    <ClInclude Include="blenders\Blender_Recorder.h" />
+    <ClInclude Include="Blender_BmmD.h" />
+    <ClInclude Include="Blender_detail_still.h" />
+    <ClInclude Include="Blender_Editor_Selection.h" />
+    <ClInclude Include="Blender_Editor_Wire.h" />
+    <ClInclude Include="Blender_Lm(EbB).h" />
+    <ClInclude Include="Blender_Model_EbB.h" />
+    <ClInclude Include="Blender_Particle.h" />
+    <ClInclude Include="Blender_Screen_SET.h" />
+    <ClInclude Include="Blender_tree.h" />
+    <ClInclude Include="ColorMapManager.h" />
+    <ClInclude Include="D3DUtils.h" />
+    <ClInclude Include="Debug\dxPixEventWrapper.h" />
+    <ClInclude Include="DetailManager.h" />
+    <ClInclude Include="DetailModel.h" />
+    <ClInclude Include="du_box.h" />
+    <ClInclude Include="du_cone.h" />
+    <ClInclude Include="du_cylinder.h" />
+    <ClInclude Include="du_sphere.h" />
+    <ClInclude Include="du_sphere_part.h" />
+    <ClInclude Include="dxApplicationRender.h" />
+    <ClInclude Include="dxConsoleRender.h" />
+    <ClInclude Include="dxDebugRender.h" />
+    <ClInclude Include="dxEnvironmentRender.h" />
+    <ClInclude Include="dxFontRender.h" />
+    <ClInclude Include="dxLensFlareRender.h" />
+    <ClInclude Include="dxObjectSpaceRender.h" />
+    <ClInclude Include="dxParticleCustom.h" />
+    <ClInclude Include="dxRainRender.h" />
+    <ClInclude Include="dxRenderDeviceRender.h" />
+    <ClInclude Include="dxRenderFactory.h" />
+    <ClInclude Include="dxStatGraphRender.h" />
+    <ClInclude Include="dxStatsRender.h" />
+    <ClInclude Include="dxThunderboltDescRender.h" />
+    <ClInclude Include="dxThunderboltRender.h" />
+    <ClInclude Include="dxUIRender.h" />
+    <ClInclude Include="dxUISequenceVideoItem.h" />
+    <ClInclude Include="dxUIShader.h" />
+    <ClInclude Include="dxWallMarkArray.h" />
+    <ClInclude Include="ETextureParams.h" />
+    <ClInclude Include="FBasicVisual.h" />
+    <ClInclude Include="FHierrarhyVisual.h" />
+    <ClInclude Include="FLOD.h" />
+    <ClInclude Include="FProgressive.h" />
+    <ClInclude Include="FSkinned.h" />
+    <ClInclude Include="FTreeVisual.h" />
+    <ClInclude Include="FVF.h" />
+    <ClInclude Include="FVisual.h" />
+    <ClInclude Include="HOM.h" />
+    <ClInclude Include="HW.h" />
+    <ClInclude Include="HWCaps.h" />
+    <ClInclude Include="IRenderDetailModel.h" />
+    <ClInclude Include="LightTrack.h" />
+    <ClInclude Include="Light_DB.h" />
+    <ClInclude Include="Light_Package.h" />
+    <ClInclude Include="ModelPool.h" />
+    <ClInclude Include="NvTriStrip.h" />
+    <ClInclude Include="NvTriStripObjects.h" />
+    <ClInclude Include="occRasterizer.h" />
+    <ClInclude Include="ParticleEffect.h" />
+    <ClInclude Include="ParticleEffectActions.h" />
+    <ClInclude Include="ParticleEffectDef.h" />
+    <ClInclude Include="ParticleGroup.h" />
+    <ClInclude Include="PSLibrary.h" />
+    <ClInclude Include="QueryHelper.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="R_Backend.h" />
+    <ClInclude Include="R_Backend_hemi.h" />
+    <ClInclude Include="R_Backend_Runtime.h" />
+    <ClInclude Include="R_Backend_tree.h" />
+    <ClInclude Include="R_Backend_xform.h" />
+    <ClInclude Include="r_constants.h" />
+    <ClInclude Include="r_constants_cache.h" />
+    <ClInclude Include="R_DStreams.h" />
+    <ClInclude Include="r_sun_cascades.h" />
+    <ClInclude Include="r__dsgraph_structure.h" />
+    <ClInclude Include="r__dsgraph_types.h" />
+    <ClInclude Include="r__occlusion.h" />
+    <ClInclude Include="r__pixel_calculator.h" />
+    <ClInclude Include="r__sector.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderResourceTraits.h" />
+    <ClInclude Include="SH_Atomic.h" />
+    <ClInclude Include="SH_Constant.h" />
+    <ClInclude Include="SH_Matrix.h" />
+    <ClInclude Include="SH_RT.h" />
+    <ClInclude Include="SH_Texture.h" />
+    <ClInclude Include="SkeletonAnimated.h" />
+    <ClInclude Include="SkeletonCustom.h" />
+    <ClInclude Include="SkeletonX.h" />
+    <ClInclude Include="stats_manager.h" />
+    <ClInclude Include="TextureDescrManager.h" />
+    <ClInclude Include="tga.h" />
+    <ClInclude Include="tss.h" />
+    <ClInclude Include="tss_def.h" />
+    <ClInclude Include="uber_deffer.h" />
+    <ClInclude Include="Utils\dxHashHelper.h" />
+    <ClInclude Include="VertexCache.h" />
+    <ClInclude Include="WallmarksEngine.h" />
+    <ClInclude Include="xrD3DDefs.h" />
+    <ClInclude Include="xrRender_console.h" />
+    <ClInclude Include="xrStripify.h" />
+    <ClInclude Include="xr_effgamma.h" />
     <ClInclude Include="blender_bloom_build.h" />
     <ClInclude Include="blender_blur.h" />
     <ClInclude Include="blender_combine.h" />
@@ -383,13 +260,12 @@
     <ClInclude Include="blender_smaa.h" />
     <ClInclude Include="blender_ssao.h" />
     <ClInclude Include="blender_ss_sunshafts.h" />
-    <ClInclude Include="..\..\xrEngine\cl_intersect.h" />
     <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="CSCompiler.h" />
-    <ClInclude Include="..\xrRender\DetailFormat.h" />
+    <ClInclude Include="DetailFormat.h" />
     <ClInclude Include="dx11HDAOCSBlender.h" />
     <ClInclude Include="dx11MinMaxSMBlender.h" />
-    <ClInclude Include="..\xrRender\light.h" />
+    <ClInclude Include="light.h" />
     <ClInclude Include="light_gi.h" />
     <ClInclude Include="Light_Render_Direct.h" />
     <ClInclude Include="light_smapvis.h" />
@@ -405,154 +281,154 @@
   <ItemGroup>
     <ClCompile Include="..\..\xrEngine\ai_script_lua_debug.cpp" />
     <ClCompile Include="..\..\xrEngine\ai_script_lua_extension.cpp" />
-    <ClCompile Include="..\xrRenderDX10\3DFluid\dx103DFluidBlenders.cpp" />
-    <ClCompile Include="..\xrRenderDX10\3DFluid\dx103DFluidData.cpp" />
-    <ClCompile Include="..\xrRenderDX10\3DFluid\dx103DFluidEmitters.cpp" />
-    <ClCompile Include="..\xrRenderDX10\3DFluid\dx103DFluidGrid.cpp" />
-    <ClCompile Include="..\xrRenderDX10\3DFluid\dx103DFluidManager.cpp" />
-    <ClCompile Include="..\xrRenderDX10\3DFluid\dx103DFluidObstacles.cpp" />
-    <ClCompile Include="..\xrRenderDX10\3DFluid\dx103DFluidRenderer.cpp" />
-    <ClCompile Include="..\xrRenderDX10\3DFluid\dx103DFluidVolume.cpp" />
-    <ClCompile Include="..\xrRenderDX10\Blender_Recorder_R3.cpp" />
-    <ClCompile Include="..\xrRenderDX10\DX10 Rain\dx10RainBlender.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10BufferUtils.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10ConstantBuffer.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10DetailManager_VS.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10HW.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10ResourceManager_Resources.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10ResourceManager_Scripting.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10r_constants.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10r_constants_cache.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10SH_RT.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10SH_Texture.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10StateUtils.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10Texture.cpp" />
-    <ClCompile Include="..\xrRenderDX10\dx10TextureUtils.cpp" />
-    <ClCompile Include="..\xrRenderDX10\MSAA\dx10MSAABlender.cpp" />
-    <ClCompile Include="..\xrRenderDX10\StateManager\dx10SamplerStateCache.cpp" />
-    <ClCompile Include="..\xrRenderDX10\StateManager\dx10ShaderResourceStateCache.cpp" />
-    <ClCompile Include="..\xrRenderDX10\StateManager\dx10State.cpp" />
-    <ClCompile Include="..\xrRenderDX10\StateManager\dx10StateCache.cpp" />
-    <ClCompile Include="..\xrRenderDX10\StateManager\dx10StateManager.cpp" />
-    <ClCompile Include="..\xrRender\Animation.cpp" />
-    <ClCompile Include="..\xrRender\blenders\Blender.cpp" />
-    <ClCompile Include="..\xrRender\blenders\Blender_Palette.cpp" />
-    <ClCompile Include="..\xrRender\blenders\Blender_Recorder.cpp" />
-    <ClCompile Include="..\xrRender\Blender_BmmD.cpp" />
-    <ClCompile Include="..\xrRender\Blender_detail_still.cpp" />
-    <ClCompile Include="..\xrRender\Blender_Editor_Selection.cpp" />
-    <ClCompile Include="..\xrRender\Blender_Editor_Wire.cpp" />
-    <ClCompile Include="..\xrRender\Blender_Lm(EbB).cpp" />
-    <ClCompile Include="..\xrRender\Blender_Model_EbB.cpp" />
-    <ClCompile Include="..\xrRender\Blender_Particle.cpp" />
-    <ClCompile Include="..\xrRender\Blender_Recorder_R2.cpp" />
-    <ClCompile Include="..\xrRender\Blender_Recorder_StandartBinding.cpp" />
-    <ClCompile Include="..\xrRender\Blender_Screen_SET.cpp" />
-    <ClCompile Include="..\xrRender\Blender_tree.cpp" />
-    <ClCompile Include="..\xrRender\ColorMapManager.cpp" />
-    <ClCompile Include="..\xrRender\D3DUtils.cpp" />
-    <ClCompile Include="..\xrRender\Debug\dxPixEventWrapper.cpp" />
-    <ClCompile Include="..\xrRender\DetailManager.cpp" />
-    <ClCompile Include="..\xrRender\DetailManager_CACHE.cpp" />
-    <ClCompile Include="..\xrRender\DetailManager_Decompress.cpp" />
-    <ClCompile Include="..\xrRender\DetailManager_soft.cpp" />
-    <ClCompile Include="..\xrRender\DetailManager_VS.cpp" />
-    <ClCompile Include="..\xrRender\DetailModel.cpp" />
-    <ClCompile Include="..\xrRender\du_box.cpp" />
-    <ClCompile Include="..\xrRender\du_cone.cpp" />
-    <ClCompile Include="..\xrRender\du_cylinder.cpp" />
-    <ClCompile Include="..\xrRender\du_sphere.cpp" />
-    <ClCompile Include="..\xrRender\du_sphere_part.cpp" />
-    <ClCompile Include="..\xrRender\dxApplicationRender.cpp" />
-    <ClCompile Include="..\xrRender\dxConsoleRender.cpp" />
-    <ClCompile Include="..\xrRender\dxDebugRender.cpp" />
-    <ClCompile Include="..\xrRender\dxEnvironmentRender.cpp" />
-    <ClCompile Include="..\xrRender\dxFontRender.cpp" />
-    <ClCompile Include="..\xrRender\dxLensFlareRender.cpp" />
-    <ClCompile Include="..\xrRender\dxObjectSpaceRender.cpp" />
-    <ClCompile Include="..\xrRender\dxParticleCustom.cpp" />
-    <ClCompile Include="..\xrRender\dxRainRender.cpp" />
-    <ClCompile Include="..\xrRender\dxRenderDeviceRender.cpp" />
-    <ClCompile Include="..\xrRender\dxRenderFactory.cpp" />
-    <ClCompile Include="..\xrRender\dxStatGraphRender.cpp" />
-    <ClCompile Include="..\xrRender\dxStatsRender.cpp" />
-    <ClCompile Include="..\xrRender\dxThunderboltDescRender.cpp" />
-    <ClCompile Include="..\xrRender\dxThunderboltRender.cpp" />
-    <ClCompile Include="..\xrRender\dxUIRender.cpp" />
-    <ClCompile Include="..\xrRender\dxUISequenceVideoItem.cpp" />
-    <ClCompile Include="..\xrRender\dxUIShader.cpp" />
-    <ClCompile Include="..\xrRender\dxWallMarkArray.cpp" />
-    <ClCompile Include="..\xrRender\ETextureParams.cpp" />
-    <ClCompile Include="..\xrRender\FBasicVisual.cpp" />
-    <ClCompile Include="..\xrRender\FHierrarhyVisual.cpp" />
-    <ClCompile Include="..\xrRender\FLOD.cpp" />
-    <ClCompile Include="..\xrRender\FProgressive.cpp" />
-    <ClCompile Include="..\xrRender\FSkinned.cpp" />
-    <ClCompile Include="..\xrRender\FTreeVisual.cpp" />
-    <ClCompile Include="..\xrRender\FVisual.cpp" />
-    <ClCompile Include="..\xrRender\HOM.cpp" />
-    <ClCompile Include="..\xrRender\HWCaps.cpp" />
-    <ClCompile Include="..\xrRender\light.cpp" />
-    <ClCompile Include="..\xrRender\LightTrack.cpp" />
-    <ClCompile Include="..\xrRender\Light_DB.cpp" />
-    <ClCompile Include="..\xrRender\Light_Package.cpp" />
-    <ClCompile Include="..\xrRender\ModelPool.cpp" />
-    <ClCompile Include="..\xrRender\NvTriStrip.cpp" />
-    <ClCompile Include="..\xrRender\NvTriStripObjects.cpp" />
-    <ClCompile Include="..\xrRender\occRasterizer.cpp" />
-    <ClCompile Include="..\xrRender\occRasterizer_core.cpp" />
-    <ClCompile Include="..\xrRender\ParticleEffect.cpp" />
-    <ClCompile Include="..\xrRender\ParticleEffectActions.cpp" />
-    <ClCompile Include="..\xrRender\ParticleEffectDef.cpp" />
-    <ClCompile Include="..\xrRender\ParticleGroup.cpp" />
-    <ClCompile Include="..\xrRender\PSLibrary.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_blur.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_dof.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_lut.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_nightvision.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_gasmask_drops.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_gasmask_dudv.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_pp_bloom.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_smaa.cpp" />
-    <ClCompile Include="..\xrRender\rendertarget_phase_sunshafts.cpp" />
-    <ClCompile Include="..\xrRender\ResourceManager.cpp" />
-    <ClCompile Include="..\xrRender\ResourceManager_Loader.cpp" />
-    <ClCompile Include="..\xrRender\ResourceManager_Reset.cpp" />
-    <ClCompile Include="..\xrRender\R_Backend.cpp" />
-    <ClCompile Include="..\xrRender\R_Backend_DBG.cpp" />
-    <ClCompile Include="..\xrRender\R_Backend_hemi.cpp" />
-    <ClCompile Include="..\xrRender\R_Backend_Runtime.cpp" />
-    <ClCompile Include="..\xrRender\R_Backend_tree.cpp" />
-    <ClCompile Include="..\xrRender\R_Backend_xform.cpp" />
-    <ClCompile Include="..\xrRender\r_constants.cpp" />
-    <ClCompile Include="..\xrRender\R_DStreams.cpp" />
-    <ClCompile Include="..\xrRender\r__dsgraph_build.cpp" />
-    <ClCompile Include="..\xrRender\r__dsgraph_render.cpp" />
-    <ClCompile Include="..\xrRender\r__dsgraph_render_lods.cpp" />
-    <ClCompile Include="..\xrRender\r__occlusion.cpp" />
-    <ClCompile Include="..\xrRender\r__pixel_calculator.cpp" />
-    <ClCompile Include="..\xrRender\r__screenshot.cpp" />
-    <ClCompile Include="..\xrRender\r__sector.cpp" />
-    <ClCompile Include="..\xrRender\r__sector_traversal.cpp" />
-    <ClCompile Include="..\xrRender\Shader.cpp" />
-    <ClCompile Include="..\xrRender\SH_Atomic.cpp" />
-    <ClCompile Include="..\xrRender\SH_Constant.cpp" />
-    <ClCompile Include="..\xrRender\SH_Matrix.cpp" />
-    <ClCompile Include="..\xrRender\SkeletonAnimated.cpp" />
-    <ClCompile Include="..\xrRender\SkeletonCustom.cpp" />
-    <ClCompile Include="..\xrRender\SkeletonRigid.cpp" />
-    <ClCompile Include="..\xrRender\SkeletonX.cpp" />
-    <ClCompile Include="..\xrRender\stats_manager.cpp" />
-    <ClCompile Include="..\xrRender\TextureDescrManager.cpp" />
-    <ClCompile Include="..\xrRender\tga.cpp" />
-    <ClCompile Include="..\xrRender\tss_def.cpp" />
-    <ClCompile Include="..\xrRender\uber_deffer.cpp" />
-    <ClCompile Include="..\xrRender\Utils\dxHashHelper.cpp" />
-    <ClCompile Include="..\xrRender\VertexCache.cpp" />
-    <ClCompile Include="..\xrRender\WallmarksEngine.cpp" />
-    <ClCompile Include="..\xrRender\xrRender_console.cpp" />
-    <ClCompile Include="..\xrRender\xrStripify.cpp" />
-    <ClCompile Include="..\xrRender\xr_effgamma.cpp" />
+    <ClCompile Include="xrRenderDX10\3DFluid\dx103DFluidBlenders.cpp" />
+    <ClCompile Include="xrRenderDX10\3DFluid\dx103DFluidData.cpp" />
+    <ClCompile Include="xrRenderDX10\3DFluid\dx103DFluidEmitters.cpp" />
+    <ClCompile Include="xrRenderDX10\3DFluid\dx103DFluidGrid.cpp" />
+    <ClCompile Include="xrRenderDX10\3DFluid\dx103DFluidManager.cpp" />
+    <ClCompile Include="xrRenderDX10\3DFluid\dx103DFluidObstacles.cpp" />
+    <ClCompile Include="xrRenderDX10\3DFluid\dx103DFluidRenderer.cpp" />
+    <ClCompile Include="xrRenderDX10\3DFluid\dx103DFluidVolume.cpp" />
+    <ClCompile Include="xrRenderDX10\Blender_Recorder_R3.cpp" />
+    <ClCompile Include="xrRenderDX10\DX10 Rain\dx10RainBlender.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10BufferUtils.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10ConstantBuffer.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10DetailManager_VS.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10HW.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10ResourceManager_Resources.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10ResourceManager_Scripting.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10r_constants.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10r_constants_cache.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10SH_RT.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10SH_Texture.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10StateUtils.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10Texture.cpp" />
+    <ClCompile Include="xrRenderDX10\dx10TextureUtils.cpp" />
+    <ClCompile Include="xrRenderDX10\MSAA\dx10MSAABlender.cpp" />
+    <ClCompile Include="xrRenderDX10\StateManager\dx10SamplerStateCache.cpp" />
+    <ClCompile Include="xrRenderDX10\StateManager\dx10ShaderResourceStateCache.cpp" />
+    <ClCompile Include="xrRenderDX10\StateManager\dx10State.cpp" />
+    <ClCompile Include="xrRenderDX10\StateManager\dx10StateCache.cpp" />
+    <ClCompile Include="xrRenderDX10\StateManager\dx10StateManager.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="blenders\Blender.cpp" />
+    <ClCompile Include="blenders\Blender_Palette.cpp" />
+    <ClCompile Include="blenders\Blender_Recorder.cpp" />
+    <ClCompile Include="Blender_BmmD.cpp" />
+    <ClCompile Include="Blender_detail_still.cpp" />
+    <ClCompile Include="Blender_Editor_Selection.cpp" />
+    <ClCompile Include="Blender_Editor_Wire.cpp" />
+    <ClCompile Include="Blender_Lm(EbB).cpp" />
+    <ClCompile Include="Blender_Model_EbB.cpp" />
+    <ClCompile Include="Blender_Particle.cpp" />
+    <ClCompile Include="Blender_Recorder_R2.cpp" />
+    <ClCompile Include="Blender_Recorder_StandartBinding.cpp" />
+    <ClCompile Include="Blender_Screen_SET.cpp" />
+    <ClCompile Include="Blender_tree.cpp" />
+    <ClCompile Include="ColorMapManager.cpp" />
+    <ClCompile Include="D3DUtils.cpp" />
+    <ClCompile Include="Debug\dxPixEventWrapper.cpp" />
+    <ClCompile Include="DetailManager.cpp" />
+    <ClCompile Include="DetailManager_CACHE.cpp" />
+    <ClCompile Include="DetailManager_Decompress.cpp" />
+    <ClCompile Include="DetailManager_soft.cpp" />
+    <ClCompile Include="DetailManager_VS.cpp" />
+    <ClCompile Include="DetailModel.cpp" />
+    <ClCompile Include="du_box.cpp" />
+    <ClCompile Include="du_cone.cpp" />
+    <ClCompile Include="du_cylinder.cpp" />
+    <ClCompile Include="du_sphere.cpp" />
+    <ClCompile Include="du_sphere_part.cpp" />
+    <ClCompile Include="dxApplicationRender.cpp" />
+    <ClCompile Include="dxConsoleRender.cpp" />
+    <ClCompile Include="dxDebugRender.cpp" />
+    <ClCompile Include="dxEnvironmentRender.cpp" />
+    <ClCompile Include="dxFontRender.cpp" />
+    <ClCompile Include="dxLensFlareRender.cpp" />
+    <ClCompile Include="dxObjectSpaceRender.cpp" />
+    <ClCompile Include="dxParticleCustom.cpp" />
+    <ClCompile Include="dxRainRender.cpp" />
+    <ClCompile Include="dxRenderDeviceRender.cpp" />
+    <ClCompile Include="dxRenderFactory.cpp" />
+    <ClCompile Include="dxStatGraphRender.cpp" />
+    <ClCompile Include="dxStatsRender.cpp" />
+    <ClCompile Include="dxThunderboltDescRender.cpp" />
+    <ClCompile Include="dxThunderboltRender.cpp" />
+    <ClCompile Include="dxUIRender.cpp" />
+    <ClCompile Include="dxUISequenceVideoItem.cpp" />
+    <ClCompile Include="dxUIShader.cpp" />
+    <ClCompile Include="dxWallMarkArray.cpp" />
+    <ClCompile Include="ETextureParams.cpp" />
+    <ClCompile Include="FBasicVisual.cpp" />
+    <ClCompile Include="FHierrarhyVisual.cpp" />
+    <ClCompile Include="FLOD.cpp" />
+    <ClCompile Include="FProgressive.cpp" />
+    <ClCompile Include="FSkinned.cpp" />
+    <ClCompile Include="FTreeVisual.cpp" />
+    <ClCompile Include="FVisual.cpp" />
+    <ClCompile Include="HOM.cpp" />
+    <ClCompile Include="HWCaps.cpp" />
+    <ClCompile Include="light.cpp" />
+    <ClCompile Include="LightTrack.cpp" />
+    <ClCompile Include="Light_DB.cpp" />
+    <ClCompile Include="Light_Package.cpp" />
+    <ClCompile Include="ModelPool.cpp" />
+    <ClCompile Include="NvTriStrip.cpp" />
+    <ClCompile Include="NvTriStripObjects.cpp" />
+    <ClCompile Include="occRasterizer.cpp" />
+    <ClCompile Include="occRasterizer_core.cpp" />
+    <ClCompile Include="ParticleEffect.cpp" />
+    <ClCompile Include="ParticleEffectActions.cpp" />
+    <ClCompile Include="ParticleEffectDef.cpp" />
+    <ClCompile Include="ParticleGroup.cpp" />
+    <ClCompile Include="PSLibrary.cpp" />
+    <ClCompile Include="rendertarget_phase_blur.cpp" />
+    <ClCompile Include="rendertarget_phase_dof.cpp" />
+    <ClCompile Include="rendertarget_phase_lut.cpp" />
+    <ClCompile Include="rendertarget_phase_nightvision.cpp" />
+    <ClCompile Include="rendertarget_phase_gasmask_drops.cpp" />
+    <ClCompile Include="rendertarget_phase_gasmask_dudv.cpp" />
+    <ClCompile Include="rendertarget_phase_pp_bloom.cpp" />
+    <ClCompile Include="rendertarget_phase_smaa.cpp" />
+    <ClCompile Include="rendertarget_phase_sunshafts.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ResourceManager_Loader.cpp" />
+    <ClCompile Include="ResourceManager_Reset.cpp" />
+    <ClCompile Include="R_Backend.cpp" />
+    <ClCompile Include="R_Backend_DBG.cpp" />
+    <ClCompile Include="R_Backend_hemi.cpp" />
+    <ClCompile Include="R_Backend_Runtime.cpp" />
+    <ClCompile Include="R_Backend_tree.cpp" />
+    <ClCompile Include="R_Backend_xform.cpp" />
+    <ClCompile Include="r_constants.cpp" />
+    <ClCompile Include="R_DStreams.cpp" />
+    <ClCompile Include="r__dsgraph_build.cpp" />
+    <ClCompile Include="r__dsgraph_render.cpp" />
+    <ClCompile Include="r__dsgraph_render_lods.cpp" />
+    <ClCompile Include="r__occlusion.cpp" />
+    <ClCompile Include="r__pixel_calculator.cpp" />
+    <ClCompile Include="r__screenshot.cpp" />
+    <ClCompile Include="r__sector.cpp" />
+    <ClCompile Include="r__sector_traversal.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SH_Atomic.cpp" />
+    <ClCompile Include="SH_Constant.cpp" />
+    <ClCompile Include="SH_Matrix.cpp" />
+    <ClCompile Include="SkeletonAnimated.cpp" />
+    <ClCompile Include="SkeletonCustom.cpp" />
+    <ClCompile Include="SkeletonRigid.cpp" />
+    <ClCompile Include="SkeletonX.cpp" />
+    <ClCompile Include="stats_manager.cpp" />
+    <ClCompile Include="TextureDescrManager.cpp" />
+    <ClCompile Include="tga.cpp" />
+    <ClCompile Include="tss_def.cpp" />
+    <ClCompile Include="uber_deffer.cpp" />
+    <ClCompile Include="Utils\dxHashHelper.cpp" />
+    <ClCompile Include="VertexCache.cpp" />
+    <ClCompile Include="WallmarksEngine.cpp" />
+    <ClCompile Include="xrRender_console.cpp" />
+    <ClCompile Include="xrStripify.cpp" />
+    <ClCompile Include="xr_effgamma.cpp" />
     <ClCompile Include="blender_bloom_build.cpp" />
     <ClCompile Include="blender_blur.cpp" />
     <ClCompile Include="blender_combine.cpp" />
@@ -623,26 +499,8 @@
     <ClCompile Include="R_Backend_LOD.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='VerifiedDX11|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-AVX|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="xrRender_R4.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)3rd party\crypto\crypto.vcxproj">
-      <Project>{fa169092-ea3e-40c1-8e5a-a2b575700fe8}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)xrCore\xrCore.vcxproj">
-      <Project>{a0f7d1fb-59a7-4717-a7e4-96f37e91998e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)xrCPU_Pipe\xrCPU_Pipe.vcxproj">
-      <Project>{ca0649dd-d089-423a-981c-46b57a884eb9}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
 </Project>

@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "../../Include/xrApi/xrAPI.h"
 
-#include "../xrRender/dxRenderFactory.h"
+#include "../xrRenderPC_R4/dxRenderFactory.h"
 
 extern dxRenderFactory RenderFactoryImpl;
 

@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "../../xrEngine/igame_persistent.h"
-#include "../xrRender/FBasicVisual.h"
+#include "FBasicVisual.h"
 #include "../../xrEngine/customhud.h"
 #include "../../xrEngine/xr_object.h"
 
-#include "../xrRender/QueryHelper.h"
+#include "QueryHelper.h"
 
 IC bool pred_sp_sort(ISpatial* _1, ISpatial* _2)
 {
@@ -15,8 +15,6 @@ IC bool pred_sp_sort(ISpatial* _1, ISpatial* _2)
 
 void CRender::render_main(Fmatrix& m_ViewProjection, bool _fportals)
 {
-	PIX_EVENT(render_main);
-	//	Msg						("---begin");
 	marker ++;
 
 	// Calculate sector(s) and their objects
@@ -222,12 +220,7 @@ extern u32 g_r;
 
 void CRender::Render()
 {
-	PIX_EVENT(CRender_Render);
-
-	VERIFY(0 == mapDistort.size() + mapHUDDistort.size());
-
 	rmNormal();
-
 	bool _menu_pp = g_pGamePersistent ? g_pGamePersistent->OnRenderPPUI_query() : false;
 	if (_menu_pp)
 	{
@@ -237,9 +230,7 @@ void CRender::Render()
 
 	IMainMenu* pMainMenu = g_pGamePersistent ? g_pGamePersistent->m_pMainMenu : 0;
 	bool bMenu = pMainMenu ? pMainMenu->CanSkipSceneRendering() : false;
-
-	if (!(g_pGameLevel && g_hud)
-		|| bMenu)
+ 	if (!(g_pGameLevel && g_hud) || bMenu)
 	{
 		Target->u_setrt(Device.dwWidth, Device.dwHeight, HW.pBaseRT,NULL,NULL, HW.pBaseZB);
 		return;
@@ -250,19 +241,18 @@ void CRender::Render()
 		m_bFirstFrameAfterReset = false;
 		return;
 	}
-
-	//.	VERIFY					(g_pGameLevel && g_pGameLevel->pHUD);
-
+ 
 	// Configure
 	RImplementation.o.distortion = FALSE; // disable distorion
 	Fcolor sun_color = ((light*)Lights.sun_adapted._get())->color;
 	BOOL bSUN = ps_r2_ls_flags.test(R2FLAG_SUN) && (u_diffuse2s(sun_color.r, sun_color.g, sun_color.b)>EPS) && !strstr(Core.Params, "-r4_dev");
-	if (o.sunstatic) bSUN = FALSE;
-	// Msg						("sstatic: %s, sun: %s",o.sunstatic?;"true":"false", bSUN?"true":"false");
+	if (o.sunstatic)
+		bSUN = FALSE;
 
 	// HOM
 	ViewBase.CreateFromMatrix(Device.mFullTransform, FRUSTUM_P_LRTB + FRUSTUM_P_FAR);
 	View = 0;
+
 	if (!ps_r2_ls_flags.test(R2FLAG_EXP_MT_CALC))
 	{
 		HOM.Enable();
@@ -270,48 +260,23 @@ void CRender::Render()
 	}
 
 	//******* Z-prefill calc - DEFERRER RENDERER
-	if (ps_r2_ls_flags.test(R2FLAG_ZFILL))
-	{
-		PIX_EVENT(DEFER_Z_FILL);
-		Device.Statistic->RenderCALC.Begin();
-		float z_distance = ps_r2_zfill;
-		Fmatrix m_zfill, m_project;
-		m_project.build_projection(
-			deg2rad(Device.fFOV/* *Device.fASPECT*/),
-			Device.fASPECT, VIEWPORT_NEAR,
-			z_distance * g_pGamePersistent->Environment().CurrentEnv->far_plane);
-		m_zfill.mul(m_project, Device.mView);
-		r_pmask(true, false); // enable priority "0"
-		set_Recorder(NULL);
-		phase = PHASE_SMAP;
-		render_main(m_zfill, false);
-		r_pmask(true, false); // disable priority "1"
-		Device.Statistic->RenderCALC.End();
-
-		// flush
-		Target->phase_scene_prepare();
-		RCache.set_ColorWriteEnable(FALSE);
-		r_dsgraph_render_graph(0);
-		RCache.set_ColorWriteEnable();
-	}
-	else
-	{
-		Target->phase_scene_prepare();
-	}
-
+	Target->phase_scene_prepare();
+	
 	//*******
 	// Sync point
-	Device.Statistic->RenderDUMP_Wait_S.Begin();
+	Device.Statistic->RenderDUMP_Wait.Begin();
 	if (ps_r2_qsync)
 	{
 		CTimer T;
 		T.Start();
+		
 		BOOL result = FALSE;
 		HRESULT hr = S_FALSE;
-		//while	((hr=q_sync_point[q_sync_count]->GetData	(&result,sizeof(result),D3DGETDATA_FLUSH))==S_FALSE) {
 		while ((hr = GetData(q_sync_point[q_sync_count], &result, sizeof(result))) == S_FALSE)
 		{
-			if (!SwitchToThread()) Sleep(ps_r2_wait_sleep);
+			if (!SwitchToThread()) 
+				Sleep(ps_r2_wait_sleep);
+			
 			if (T.GetElapsed_ms() > 500)
 			{
 				result = FALSE;
@@ -319,23 +284,28 @@ void CRender::Render()
 			}
 		}
 	}
-	Device.Statistic->RenderDUMP_Wait_S.End();
+
+	Device.Statistic->RenderDUMP_Wait.End();
+
+
 	q_sync_count = (q_sync_count + 1) % HW.Caps.iGPUNum;
-	//CHK_DX										(q_sync_point[q_sync_count]->Issue(D3DISSUE_END));
 	CHK_DX(EndQuery(q_sync_point[q_sync_count]));
 
 	//******* Main calc - DEFERRER RENDERER
 	// Main calc
 	Device.Statistic->RenderCALC.Begin();
 	r_pmask(true, false, true); // enable priority "0",+ capture wmarks
-	if (bSUN) set_Recorder(&main_coarse_structure);
-	else set_Recorder(NULL);
+	if (bSUN)
+		set_Recorder(&main_coarse_structure);
+	else 
+		set_Recorder(NULL);
 	phase = PHASE_NORMAL;
 	render_main(Device.mFullTransform, true);
 	set_Recorder(NULL);
 	r_pmask(true, false); // disable priority "1"
 	Device.Statistic->RenderCALC.End();
 	
+	Device.Statistic->RenderSSFX_Terrain.Begin();
 	if (RImplementation.o.ssfx_core)
 	{
 		// HUD Masking rendering
@@ -354,28 +324,17 @@ void CRender::Render()
 		Target->u_setrt(Device.dwWidth, Device.dwHeight, NULL, NULL, NULL, !RImplementation.o.dx10_msaa ? HW.pBaseZB : Target->rt_MSAADepth->pZRT);
 		r_dsgraph_render_landscape(0, false);
 	}
+	Device.Statistic->RenderSSFX_Terrain.End();
 
-	BOOL split_the_scene_to_minimize_wait = FALSE;
-	if (ps_r2_ls_flags.test(R2FLAG_EXP_SPLIT_SCENE)) split_the_scene_to_minimize_wait = TRUE;
+	bool	split_the_scene_to_minimize_wait = TRUE;
+
+
+	 
 
 	//******* Main render :: PART-0	-- first
-	if (!split_the_scene_to_minimize_wait)
+	if (split_the_scene_to_minimize_wait)
 	{
-		PIX_EVENT(DEFER_PART0_NO_SPLIT);
-		// level, DO NOT SPLIT
-		Target->phase_scene_begin();
-		r_dsgraph_render_hud();
-		r_dsgraph_render_graph(0);
-		r_dsgraph_render_lods(true, true);
-		if (Details) Details->Render();
-		if (ps_r2_ls_flags.test(R2FLAG_TERRAIN_PREPASS)) r_dsgraph_render_landscape(1, true);
-		Target->phase_scene_end();
-	}
-	else
-	{
-		PIX_EVENT(DEFER_PART0_SPLIT);
-		// level, SPLIT
-		Target->phase_scene_begin();
+  		Target->phase_scene_begin();
 		r_dsgraph_render_graph(0);
 		Target->disable_aniso();
 	}
@@ -394,8 +353,9 @@ void CRender::Render()
 	LP_pending.clear();
 	if (RImplementation.o.dx10_msaa)
 		RCache.set_ZB(RImplementation.Target->rt_MSAADepth->pZRT);
+
+
 	{
-		PIX_EVENT(DEFER_TEST_LIGHT_VIS);
 		// perform tests
 		u32 count = 0;
 		light_Package& LP = Lights.package;
@@ -440,29 +400,7 @@ void CRender::Render()
 	//******* Main render :: PART-1 (second)
 	if (split_the_scene_to_minimize_wait)
 	{
-		PIX_EVENT(DEFER_PART1_SPLIT);
-		// skybox can be drawn here
-		
-		if (0)
-		{
-			if (!RImplementation.o.dx10_msaa)
-				Target->u_setrt(Target->rt_Generic_0, Target->rt_Generic_1, 0, HW.pBaseZB);
-			else
-				Target->u_setrt(Target->rt_Generic_0_r, Target->rt_Generic_1, 0,
-				                RImplementation.Target->rt_MSAADepth->pZRT);
-			RCache.set_CullMode(CULL_NONE);
-			RCache.set_Stencil(FALSE);
-
-			// draw skybox
-			RCache.set_ColorWriteEnable();
-			//CHK_DX(HW.pDevice->SetRenderState			( D3DRS_ZENABLE,	FALSE				));
-			RCache.set_Z(FALSE);
-			g_pGamePersistent->Environment().RenderSky();
-			//CHK_DX(HW.pDevice->SetRenderState			( D3DRS_ZENABLE,	TRUE				));
-			RCache.set_Z(TRUE);
-		}
-
-		// level
+ 		// level
 		Target->phase_scene_begin();
 		r_dsgraph_render_hud();
 		r_dsgraph_render_lods(true, true);
@@ -482,11 +420,11 @@ void CRender::Render()
 
 	// Update incremental shadowmap-visibility solver
 	{
-		PIX_EVENT(DEFER_FLUSH_OCCLUSION);
 		u32 it = 0;
 		for (it = 0; it < Lights_LastFrame.size(); it++)
 		{
-			if (0 == Lights_LastFrame[it]) continue ;
+			if (0 == Lights_LastFrame[it])
+				continue ;
 			try
 			{
 				Lights_LastFrame[it]->svis.flushoccq();
@@ -501,18 +439,12 @@ void CRender::Render()
 
 	// full screen pass to mark msaa-edge pixels in highest stencil bit
 	if (RImplementation.o.dx10_msaa)
-	{
-		PIX_EVENT(MARK_MSAA_EDGES);
-		Target->mark_msaa_edges();
-	}
-
+  		Target->mark_msaa_edges();
+ 
 	//	TODO: DX10: Implement DX10 rain.
 	if (ps_r2_ls_flags.test(R3FLAG_DYN_WET_SURF))
-	{
-		PIX_EVENT(DEFER_RAIN);
-		render_rain();
-	}
-
+  		render_rain();
+ 
 	{
 		// Save previus and current matrices
 		{

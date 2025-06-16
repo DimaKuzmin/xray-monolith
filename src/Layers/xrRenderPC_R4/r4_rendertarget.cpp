@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "../xrRender/resourcemanager.h"
+#include "resourcemanager.h"
 #include "blender_light_occq.h"
 #include "blender_light_mask.h"
 #include "blender_light_direct.h"
@@ -29,8 +29,8 @@
 #include "blender_hdr10_bloom.h"
 #include "blender_hdr10_lens_flare.h"
 
-#include "../xrRender/dxRenderDeviceRender.h"
-#include "../xrRender/xrRender_console.h"
+#include "dxRenderDeviceRender.h"
+#include "xrRender_console.h"
 
 #include <D3DX10Tex.h>
 

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "../xrRender/du_sphere_part.h"
+#include "du_sphere_part.h"
 
 #include "../xrRenderDX10/dx10BufferUtils.h"
 

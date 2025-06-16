@@ -1,18 +1,18 @@
 #include "stdafx.h"
 #include "r4.h"
-#include "../xrRender/fbasicvisual.h"
+#include "fbasicvisual.h"
 #include "../../xrEngine/xr_object.h"
 #include "../../xrEngine/CustomHUD.h"
 #include "../../xrEngine/igame_persistent.h"
 #include "../../xrEngine/environment.h"
-#include "../xrRender/SkeletonCustom.h"
-#include "../xrRender/LightTrack.h"
-#include "../xrRender/dxRenderDeviceRender.h"
-#include "../xrRender/dxWallMarkArray.h"
-#include "../xrRender/dxUIShader.h"
+#include "SkeletonCustom.h"
+#include "LightTrack.h"
+#include "dxRenderDeviceRender.h"
+#include "dxWallMarkArray.h"
+#include "dxUIShader.h"
 
 #include "../xrRenderDX10/3DFluid/dx103DFluidManager.h"
-#include "../xrRender/ShaderResourceTraits.h"
+#include "ShaderResourceTraits.h"
 
 #include "D3DX10Core.h"
 
@@ -1486,17 +1486,8 @@ HRESULT CRender::shader_compile(
 	if (o.dx10_msaa)
 	{
 		static char def[ 256 ];
-		//if( m_MSAASample < 0 )
-		//{
-		def[0] = '0';
-		//	sh_name[len]='0'; ++len;
-		//}
-		//else
-		//{
-		//	def[0]= '0' + char(m_MSAASample);
-		//	sh_name[len]='0' + char(m_MSAASample); ++len;
-		//}
-		def[1] = 0;
+ 		def[0] = '0';
+ 		def[1] = 0;
 		defines[def_it].Name = "ISAMPLE";
 		defines[def_it].Definition = def;
 		def_it ++;

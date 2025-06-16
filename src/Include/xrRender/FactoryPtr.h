@@ -1,10 +1,8 @@
-#ifndef	FactoryPtr_included
-#define FactoryPtr_included
 #pragma once
 
 #include "RenderFactory.h"
 #include "../../Include/xrAPI/xrAPI.h"
-#include "../../Layers/xrRender/dxRenderFactory.h"
+#include "../../Layers/xrRenderPC_R4/dxRenderFactory.h"
 
 #define FACTORY_PTR_INSTANCIATE(Class) \
 	inline void FactoryPtr<I##Class>::CreateObject(void) \
@@ -80,18 +78,4 @@ FACTORY_PTR_INSTANCIATE(EnvDescriptorRender)
 FACTORY_PTR_INSTANCIATE(EnvDescriptorMixerRender)
 #endif // _EDITOR
 FACTORY_PTR_INSTANCIATE(FontRender)
-/*
-void FactoryPtr<IStatsRender>::CreateObject(void)
-{
-	m_pObject = RenderFactory->CreateStatsRender();
-}
-
-void FactoryPtr<IStatsRender>::DestroyObject(void)
-{
-	RenderFactory->DestroyStatsRender(m_pObject);
-	m_pObject = NULL;
-}
-*/
-
-
-#endif	//	FactoryPtr_included
+ 

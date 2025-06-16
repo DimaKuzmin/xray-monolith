@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "../xrRender/du_sphere.h"
+#include "du_sphere.h"
 #include "../xrRenderDX10/dx10BufferUtils.h"
 
 /*

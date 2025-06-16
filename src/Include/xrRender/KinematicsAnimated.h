@@ -1,10 +1,8 @@
-#ifndef	KinematicsAnimated_included
-#define	KinematicsAnimated_included
 #pragma once
 
 #include "../../xrEngine/SkeletonMotions.h"
 #include "animation_blend.h"
-#include "../../layers/xrrender/KinematicAnimatedDefs.h"
+#include "../Layers/xrRenderPC_R4/KinematicAnimatedDefs.h"
 
 class IKinematics;
 class CBlend;
@@ -112,9 +110,4 @@ public:
 	virtual IKinematics* _BCL dcast_PKinematics() = 0;
 
 	virtual float get_animation_length(MotionID motion_ID) = 0;
-	//#ifdef DEBUG
-	//	virtual	const BlendSVec			&blend_cycle	(const u32 &bone_part_id) const = 0;
-	//#endif //	DEBUG
 };
-
-#endif	//	KinematicsAnimated_included
