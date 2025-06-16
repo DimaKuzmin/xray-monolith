@@ -935,8 +935,37 @@ float scope_fog_sharp = 4.0f;
 int scope_2dtexactive = 0.0;
 Fvector3 ssfx_wetness_multiplier = Fvector3().set(1.0f, 0.3f, 0.0f);
 
+
+class CCC_OptickCaptureStart : public IConsole_Command
+{
+public:
+	CCC_OptickCaptureStart(LPCSTR N) : IConsole_Command(N) { bEmptyArgsHandled = true; };
+
+	virtual void Execute(LPCSTR args)
+	{
+		OPTICK_START_CAPTURE();
+ 	}
+};
+
+class CCC_OptickCaptureSTOP : public IConsole_Command
+{
+public:
+	CCC_OptickCaptureSTOP(LPCSTR N) : IConsole_Command(N) { bEmptyArgsHandled = true; };
+
+	virtual void Execute(LPCSTR args)
+	{
+		OPTICK_STOP_CAPTURE();
+		OPTICK_SAVE_CAPTURE("OPTICK_SAVE.opt");
+	}
+
+};
+
 void CCC_Register()
 {
+	CMD1(CCC_OptickCaptureStart, "optick_start");
+	CMD1(CCC_OptickCaptureSTOP, "optick_save");
+
+
 	// General
 	CMD1(CCC_Help, "help");
 	CMD1(CCC_Quit, "quit");

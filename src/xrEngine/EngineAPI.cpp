@@ -5,13 +5,7 @@
 #include "stdafx.h"
 #include "EngineAPI.h"
 #include "../xrcdb/xrXRC.h"
-
-//#include "securom_api.h"
-
-//#define STATIC_RENDERER_R1
-//#define STATIC_RENDERER_R2
-//#define STATIC_RENDERER_R3
-//#define STATIC_RENDERER_R4
+#include "x_ray.h"
 
 extern xr_token* vid_quality_token;
 
@@ -22,26 +16,7 @@ extern xr_token* vid_quality_token;
 void __cdecl dummy(void)
 {
 };
-
-// xrSound
-// libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib
-// xrPhysics
-// libvorbisfile_static.lib;libogg_static.lib;OpenAL32.lib
-// xrNetServer
-// Ws2_32.lib;dxerr.lib
-// xrEngine
-// vfw32.lib;libogg_static.lib;libtheora_static.lib
-// xrRenderR4
-// dxguid.lib;d3dx11.lib;D3DCompiler.lib;d3d11.lib;dxgi.lib;nvapi.lib;dxerr.lib;d3d10.lib
-// xrRenderR3
-// dxguid.lib;d3dcompiler.lib;d3d10.lib;d3dx10.lib;dxgi.lib;nvapi.lib
-// xrRenderR2
-// nvapi.lib
-// xrRenderR1
-// d3dx9.lib;nvapi.lib
-// OpenAL32
-// version.lib;winmm.lib
-
+ 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "vfw32.lib")
 #pragma comment(lib, "nvapi.lib")
@@ -152,13 +127,6 @@ void CEngineAPI::InitializeNotDedicated()
 		psDeviceFlags.set(rsR3, FALSE);
 		Log("Loading DLL:", r4_name);
 		DllMainXrRenderR4(NULL, DLL_PROCESS_ATTACH, NULL);
-        //hRender = LoadLibrary(r4_name);
-	//if (0 == hRender)
-	//{
-	//    // try to load R1
-	//    Msg("! ...Failed - incompatible hardware/pre-Vista OS.");
-	//    psDeviceFlags.set(rsR2, TRUE);
-        //}
 		g_current_renderer = 0;
     }
 #endif
@@ -171,15 +139,7 @@ void CEngineAPI::InitializeNotDedicated()
 		psDeviceFlags.set(rsR4, FALSE);
 		Log("Loading DLL:", r3_name);
 		DllMainXrRenderR3(NULL, DLL_PROCESS_ATTACH, NULL);
-		//hRender = LoadLibrary(r3_name);
-		//if (0 == hRender)
-		//{
-		//    // try to load R1
-		//    Msg("! ...Failed - incompatible hardware/pre-Vista OS.");
-		//    psDeviceFlags.set(rsR2, TRUE);
-		//}
-		//else
-		g_current_renderer = 3;
+ 		g_current_renderer = 3;
 	}
 #endif
 
@@ -191,14 +151,7 @@ void CEngineAPI::InitializeNotDedicated()
 		psDeviceFlags.set(rsR4, FALSE);
 		Log("Loading DLL:", r2_name);
 		DllMainXrRenderR2(NULL, DLL_PROCESS_ATTACH, NULL);
-		//hRender = LoadLibrary(r2_name);
-	//if (0 == hRender)
-	//{
-	//    // try to load R1
-	//    Msg("! ...Failed - incompatible hardware.");
-	//}
-        //else
-            g_current_renderer = 2;
+	    g_current_renderer = 2;
     }
 #endif
 }
@@ -440,4 +393,51 @@ void CEngineAPI::CreateRendererList()
 		//#endif // DEBUG
 	}
 #endif //#ifndef DEDICATED_SERVER
+}
+
+
+int stack_overflow_exception_filter(int exception_code)
+{
+	if (exception_code == EXCEPTION_STACK_OVERFLOW)
+		return EXCEPTION_EXECUTE_HANDLER;
+	else
+		return EXCEPTION_CONTINUE_SEARCH;
+}
+
+extern BOOL DllMainOpenAL32(HANDLE module, DWORD reason, LPVOID reserved);
+extern BOOL DllMainXrCore(HANDLE hinstDLL, DWORD ul_reason_for_call, LPVOID lpvReserved);
+extern BOOL DllMainXrPhysics(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved);
+
+extern void EngineStart1(LPCSTR cmd);
+
+int APIENTRY WinMain(HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	char* lpCmdLine,
+	int nCmdShow)
+{
+	OPTICK_APP("X-Ray Engine");
+//	OPTICK_THREAD("MAIN THREAD");
+
+	DllMainOpenAL32(NULL, DLL_PROCESS_ATTACH, NULL);
+	DllMainXrCore(NULL, DLL_PROCESS_ATTACH, NULL);
+	DllMainXrPhysics(NULL, DLL_PROCESS_ATTACH, NULL);
+
+	DllMainXrCore(NULL, DLL_THREAD_ATTACH, NULL);
+
+	__try
+	{
+		
+		EngineStart1(lpCmdLine);
+	}
+	__except (stack_overflow_exception_filter(GetExceptionCode()))
+	{
+		_resetstkoflw();
+		FATAL("stack overflow");
+	}
+
+	DllMainXrPhysics(NULL, DLL_PROCESS_DETACH, NULL);
+	DllMainXrCore(NULL, DLL_PROCESS_DETACH, NULL);
+	DllMainOpenAL32(NULL, DLL_PROCESS_DETACH, NULL);
+
+	return (0);
 }

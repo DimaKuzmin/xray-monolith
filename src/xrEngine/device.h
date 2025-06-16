@@ -430,6 +430,8 @@ public:
 	}
 
 public:
+	void EcoRender();
+	void CalculateMatrix();
 	void xr_stdcall on_idle();
 	bool xr_stdcall on_message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& result);
 
@@ -471,7 +473,6 @@ extern ENGINE_API CRenderDevice Device;
 extern ENGINE_API float refresh_rate;
 #endif // ECO_RENDER
 
-extern ENGINE_API bool g_bBenchmark;
 
 typedef fastdelegate::FastDelegate0<bool> LOADING_EVENT;
 extern ENGINE_API xr_list<LOADING_EVENT> g_loading_events;

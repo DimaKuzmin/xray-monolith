@@ -10,8 +10,6 @@
 #include "Render.h"
 #include "CameraManager.h"
 
-#include "xrSash.h"
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -21,8 +19,6 @@ CDemoPlay::CDemoPlay(const char* name, float ms, u32 cycles, float life_time) : 
 {
 	Msg("*** Playing demo: %s", name);
 	Console->Execute("hud_weapon 0");
-	if (g_bBenchmark || g_SASH.IsRunning())
-		Console->Execute("hud_draw 0");
 
 	fSpeed = ms;
 	dwCyclesLeft = cycles ? cycles : 1;
@@ -75,8 +71,6 @@ CDemoPlay::~CDemoPlay()
 	xr_delete(m_pMotion);
 	xr_delete(m_MParam);
 	Console->Execute("hud_weapon 1");
-	if (g_bBenchmark || g_SASH.IsRunning())
-		Console->Execute("hud_draw 1");
 }
 
 void CDemoPlay::stat_Start()
@@ -159,6 +153,7 @@ void CDemoPlay::stat_Stop()
 
 	Msg("* [DEMO] FPS: average[%f], min[%f], max[%f], middle[%f]", rfps_average, rfps_min, rfps_max, rfps_middlepoint);
 
+	/*
 	if (g_bBenchmark)
 	{
 		string_path fname;
@@ -186,6 +181,7 @@ void CDemoPlay::stat_Stop()
 
 		Console->Execute("quit");
 	}
+	*/
 }
 
 #define FIX(a) while (a>=m_count) a-=m_count

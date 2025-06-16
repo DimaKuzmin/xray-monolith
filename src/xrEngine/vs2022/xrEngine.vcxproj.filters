@@ -423,9 +423,6 @@
     <ClInclude Include="..\SkeletonMotions.h">
       <Filter>RenderRef\Execution &amp; 3D\Visuals\Skeleton</Filter>
     </ClInclude>
-    <ClInclude Include="..\xrSASH.h">
-      <Filter>OpenAutomate</Filter>
-    </ClInclude>
     <ClInclude Include="..\ShadersExternalData.h">
       <Filter>Game API\Objects</Filter>
     </ClInclude>
@@ -734,9 +731,6 @@
     <ClCompile Include="..\SkeletonMotions.cpp">
       <Filter>RenderRef\Execution &amp; 3D\Visuals\Skeleton</Filter>
     </ClCompile>
-    <ClCompile Include="..\xrSASH.cpp">
-      <Filter>OpenAutomate</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3rd party\discord\achievement_manager.cpp">
       <Filter>Interfaces\Discord</Filter>
     </ClCompile>
@@ -779,18 +773,18 @@
     <ClCompile Include="..\..\3rd party\discord\voice_manager.cpp">
       <Filter>Interfaces\Discord</Filter>
     </ClCompile>
+    <ClCompile Include="..\Application.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\StatsFrame_Begins.cpp">
+      <Filter>RenderRef\Execution &amp; 3D\Device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="resource.rc">
-      <Filter>General\Resources</Filter>
-    </ResourceCompile>
+    <ResourceCompile Include="..\resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="splash_xrcs_en.bmp">
-      <Filter>General\Resources</Filter>
-    </Image>
-    <Image Include="stalker_cs.ico">
-      <Filter>General\Resources</Filter>
-    </Image>
+    <Image Include="..\splash_xrcs_en.bmp" />
+    <Image Include="..\stalker_cs.ico" />
   </ItemGroup>
 </Project>

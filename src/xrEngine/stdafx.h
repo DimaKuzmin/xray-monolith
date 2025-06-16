@@ -31,24 +31,20 @@
 
 // you must define ENGINE_BUILD then building the engine itself
 // and not define it if you are about to build DLL
-#ifndef NO_ENGINE_API
-#ifdef ENGINE_BUILD
-#define DLL_API
-//__declspec(dllimport)
-#define ENGINE_API
-//__declspec(dllexport)
-#else
-#undef DLL_API
-#define DLL_API
-//__declspec(dllexport)
-#define ENGINE_API
-//__declspec(dllimport)
-#endif
-#else
-#define ENGINE_API
-#define DLL_API
-#endif // NO_ENGINE_API
+#include "optick/optick.h"
+#pragma comment(lib, "OptickCore.lib")
 
+#	define EVENT_PUSH(a)		OPTICK_PUSH(a)
+#	define EVENT_POP			OPTICK_POP()
+
+#	define START_PROFILE(a) {   OPTICK_EVENT(a) 
+#	define STOP_PROFILE			OPTICK_POP() }
+#	define START_FRAME(a)		OPTICK_FRAME(a)
+
+
+
+#define ENGINE_API
+#define DLL_API 
 #define ECORE_API
 
 // Our headers

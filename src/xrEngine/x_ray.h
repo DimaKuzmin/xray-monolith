@@ -1,5 +1,4 @@
-#ifndef __X_RAY_H__
-#define __X_RAY_H__
+#pragma once 
 
 // refs
 class ENGINE_API CGameFont;
@@ -8,9 +7,7 @@ class ENGINE_API CGameFont;
 #include "../Include/xrRender/ApplicationRender.h"
 
 // definition
-class ENGINE_API CApplication :
-	public pureFrame,
-	public IEventReceiver
+class ENGINE_API CApplication : public pureFrame, public IEventReceiver
 {
 	friend class dxApplicationRender;
 
@@ -121,5 +118,4 @@ extern ENGINE_API float discord_update_rate;
 LPCSTR xr_ToUTF8(LPCSTR input, int max_length = 128);
 
 void clearDiscordPresence();
-
-#endif //__XR_BASE_H__
+ 
